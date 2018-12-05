@@ -56,7 +56,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            'vote/templates',
+            # 'vote/templates',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
