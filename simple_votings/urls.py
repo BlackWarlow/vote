@@ -20,5 +20,7 @@ from vote import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index_page)
+    path('', views.index_page),
+    path('creators/', views.creators_page),
+    path('pools/', views.pools_page)
 ]
