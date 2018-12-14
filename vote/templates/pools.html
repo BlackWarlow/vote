@@ -10,5 +10,10 @@
 		{% include "menu.html" %}
 		<h1>{{main_header}}</h1>
 		<hr>
+		<ul>
+		{% for item in pools %}
+			<li>{{ item.variant_name }} - {{ item.votes }}</li>
+		{% endfor %}
+		</ul>
 	</body>
 </html>
