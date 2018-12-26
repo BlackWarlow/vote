@@ -11,12 +11,5 @@
 		{% include "menu.html" %}
 		<h1>{{main_header}}</h1>
 		<hr>
-		<h3>Авторы проекта:</h3>
-		<ul>
-		{% for auth in authors %}
-			<li><a href="{{ auth.social }}">{{ auth.name }}</a></li>
-		{% endfor %}
-		</ul>
-		<hr>
 	</body>
 </html>
