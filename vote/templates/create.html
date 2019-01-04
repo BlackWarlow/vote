@@ -10,19 +10,15 @@
 		{% include "menu.html" %}
 		<h1>{{main_header}}</h1>
 		<hr>
-		<form action="/create/" method="POST">
-		{% csrf_token %}
-		{{ form.name.label }}:<br>
-		{{ form.name }}<br>
-		{{ form.first_variant.label }}:<br>
-		{{ form.first_variant }}<br>
-		{{ form.second_variant.label }}:<br>
-		{{ form.second_variant }}<br>
-		<input type="submit" value="Create!">
+		<form action="/pools/create/" method="POST">
+			{% csrf_token %}
+			{{ form.name.label }}:<br>
+			{{ form.name }}<br>
+			{{ form.first_variant.label }}:<br>
+			{{ form.first_variant }}<br>
+			{{ form.second_variant.label }}:<br>
+			{{ form.second_variant }}<br>
+			<input type="submit" value="Create!">
 		</form>
-		<br><br>
-		{{ first_variant }}
-		{{ second_variant }}
-		{{ p_name }}
 	</body>
 </html>

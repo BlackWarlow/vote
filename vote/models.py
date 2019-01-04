@@ -4,7 +4,8 @@ from django.db import models
 # Create your models here.
 
 class Pool(models.Model):
-    date = models.DateTimeField()
+    date = models.DateField(default="01.01.2000")
+    time = models.TimeField(default="00:00")
     name = models.CharField(max_length=100)
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
 

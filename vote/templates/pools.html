@@ -6,14 +6,56 @@
 		<title>{{ title }}</title>
 	</head>
 	
+	<style>
+		.pool_container {
+			width: 66%;
+			padding-top: 5px;
+			padding-right: 15px;
+			padding-bottom: 3px;
+			
+			margin-left: 50px;
+			margin-bottom: 10px;
+			
+			border-radius: 5px;
+			background-color: #BCD9F2;
+			color: black;
+		}
+		.pool_name {
+			padding: 5px;
+			padding-left: 25px;
+			
+			margin-bottom: 3px;
+			margin-left: 15px;
+			
+			border-radius: 5px;
+			background-color: #F0F8FF;
+		}
+		.variant_container {
+			padding-left: 10px;
+			
+			margin-right: 50px;
+			margin-bottom: 3px;
+			
+			border-radius: 5px;
+			background-color: #F0F8FF;
+		}
+	</style>
+	
 	<body>
 		{% include "menu.html" %}
 		<h1>{{main_header}}</h1>
 		<hr>
-		<ul>
-		{% for item in pools %}
-			<li>{{ item.variant_name }} - {{ item.votes }}</li>
+		
+		{% for pool in pools%}
+			<div class="pool_container">
+				<div class="pool_name">{{ pool.1.name }}</div>
+				<ul>
+				{% for variant in pool.0 %}
+					<li class="variant_container">{{ variant.variant_name }} - {{ variant.votes }}</li>
+				{% endfor %}
+				</ul>
+			</div>
 		{% endfor %}
-		</ul>
+		
 	</body>
 </html>

@@ -1,0 +1,36 @@
+body{
+    background: #222;
+    color: white;
+}
+.menu{
+    height: 46px;
+    margin-left: 2px;
+    width: 337px;
+    border-radius: 5px;
+    background: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+.dropdown{
+    padding-top: 0px;
+}
+.btn{
+    font-size: 16px;
+    background: #999;
+    color: #c255c255c255;
+    height: 45px;
+}
+#main{
+    background: #999;
+    font-size: 16px;
+    text-align: center;
+    height: 46px;
+    margin-top: 0px;
+}
+#logotype{
+    padding-top: 0px;
+}
+img{
+    border-radius:5px;
+}

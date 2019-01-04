@@ -1,5 +1,36 @@
-<p>| <b>Меню сайта</b> |
-{% for item in menu %}
-<a href="{{ item.link }}">{{ item.text }}</a>&nbsp;|
-{% endfor %}
-<hr>
+{% load static %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+<link rel="stylesheet" href="{% static 'menu.css' %}">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+<div class="menu">
+    <img src="{% static 'Logo.png' %}" id="logotype" with="45px" height="45px" alt="logo">
+    <a href="{{ menu.0.link }}" class="btn btn-secondary btn-lg active" id="main" role="button" aria-pressed="true">
+		{{ menu.0.text }}
+	</a>
+
+    <div class="dropdown">
+        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			Опрос
+        </a>
+
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <a class="dropdown-item" href="{{ menu.1.link }}">{{ menu.1.text }}</a>
+            <a class="dropdown-item" href="{{ menu.2.link }}">{{ menu.2.text }}</a>
+            <a class="dropdown-item" href="{{ menu.3.link }}">{{ menu.3.text }}</a>
+        </div>
+    </div>
+    <div class="dropdown">
+        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			Аккаунт
+        </a>
+
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <a class="dropdown-item" href="{{ menu.4.link }}">{{ menu.4.text }}</a>
+            <a class="dropdown-item" href="{{ menu.5.link }}">{{ menu.5.text }}</a>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,20 @@
+body {
+ background: #222;
+ color: 	#F0F8FF;
+}
+.reg_table{
+   padding-top: 100px;
+}
+#exampleInputEmail1 {
+    width: 300px;
+ }
+#exampleInputPassword1{
+    width: 300px;
+ }
+#exampleInputName1{
+    width: 300px;
+ }
+a{
+    text-decoration: none;
+	color: black;
+}

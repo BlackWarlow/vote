@@ -14,7 +14,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+import django.contrib.auth
 
 from vote import views
 
@@ -23,5 +26,7 @@ urlpatterns = [
     path('', views.index_page),
     path('creators/', views.creators_page),
     path('pools/', views.pools_page),
-    path('create/', views.pool_create_page),
-]
+    path('pools/create/', views.pool_create_page),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/user/', views.user),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
