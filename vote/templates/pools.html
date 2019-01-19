@@ -7,6 +7,41 @@
 		<link rel="shortcut icon" href="{% static 'favicon.ico' %}">
 	</head>
 	
+	<style>
+		.pool_container {
+			width: 66%;
+			padding-top: 5px;
+			padding-right: 15px;
+			padding-bottom: 3px;
+			
+			margin-left: 50px;
+			margin-bottom: 10px;
+			
+			border-radius: 5px;
+			background-color: #BCD9F2;
+			color: black;
+		}
+		.pool_name {
+			padding: 5px;
+			padding-left: 25px;
+			
+			margin-bottom: 3px;
+			margin-left: 15px;
+			
+			border-radius: 5px;
+			background-color: #F0F8FF;
+		}
+		.variant_container {
+			padding-left: 10px;
+			
+			margin-right: 50px;
+			margin-bottom: 3px;
+			
+			border-radius: 5px;
+			background-color: #F0F8FF;
+		}
+	</style>
+	
 	<body>
 		{% include "menu.html" %}
 		<h1>{{main_header}}</h1>
@@ -22,6 +57,6 @@
 			</ul>
 		{% endfor %}
 		</ul>
-		
+
 	</body>
 </html>

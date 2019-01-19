@@ -33,7 +33,7 @@
 		{% include "menu.html" %}
 		<h1>{{main_header}}</h1>
 		<hr>
-		<form action="/create/" method="POST">
+		<form action="create/" method="POST">
 			{% csrf_token %}
 			<div id='pool_name'>
 				{{ form.name.label }}<br>
@@ -84,6 +84,5 @@
 			<input type="button", value="Добавить поле", onclick="add_variant()">
 			<input type="button", value="Убрать поле", onclick="del_variant()">
 		</form>
-		
 	</body>
 </html>

@@ -23,3 +23,8 @@ class Create_Pool(forms.Form):
                            max_length=100, required=False)
     variant_10=forms.CharField(label="Десятый вариант:",
                            max_length=100, required=False)
+
+class User_auth(forms.Form):
+    username = forms.CharField(
+        label="Имя пользователя", min_length=3, max_length=25, required=True)
+    password = forms.CharField(label="Пароль", widget=forms.PasswordInput())
