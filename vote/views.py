@@ -3,11 +3,13 @@ from vote.models import *
 from vote.forms import *
 
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from django.contrib.auth.models import User, AnonymousUser
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.decorators import login_required
+
+from django.urls import reverse
 
 def get_base_context(request):
     context = {
@@ -92,7 +94,7 @@ def pool_create_page(request):
     return render(request, 'create.html', context)
 
 
-def login(request):
+def login_page(request):
     context = get_base_context(request)
     if request.user.is_authenticated:
         # if user is logged in
@@ -108,6 +110,7 @@ def login(request):
                 if user is not None:
                     # if user exists login
                     login(request, user)
+                    return redirect(reverse('main-page'))
                 else:
                     # if password or username is not valid
                     context["error"] = True
@@ -132,7 +135,7 @@ def user(request):
     return render(request, 'user.html', context)
 
 @login_required(login_url='/accounts/login/')
-def logout(request):
+def logout_page(request):
     context = get_base_context(request)
     logout(request)
     return render(request, "logout.html", context)

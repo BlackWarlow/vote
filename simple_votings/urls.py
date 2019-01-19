@@ -23,10 +23,11 @@ from vote import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index_page),
+    path('', views.index_page, name='main-page'),
     path('creators/', views.creators_page),
     path('pools/', views.pools_page),
     path('pools/create/', views.pool_create_page),
-    path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/login/', views.login_page),
+    path('accounts/logout/', views.logout_page),
     path('accounts/user/', views.user),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
