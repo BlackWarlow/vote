@@ -33,7 +33,7 @@
 		{% include "menu.html" %}
 		<h1>{{main_header}}</h1>
 		<hr>
-		<form action="create/" method="POST">
+		<form action="/pools/create/" method="POST">
 			{% csrf_token %}
 			<div id='pool_name'>
 				{{ form.name.label }}<br>

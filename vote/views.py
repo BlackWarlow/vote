@@ -54,6 +54,7 @@ def pools_page(request):
     context['pools'] = lst
     return render(request, 'pools.html', context)
 
+
 @login_required(login_url='/accounts/login/')
 def pool_create_page(request):
     context = get_base_context(request)
@@ -65,15 +66,11 @@ def pool_create_page(request):
         form = Create_Pool(request.POST)
 
         if form.is_valid():
-            # =====
             # Pool name
             p_name = form.data['name']
 
-            # User object
-            usr = User.objects.filter(username='usr')[0]
-
             # Pool object
-            poolobj = Pool(date=context['current_time'], name=p_name, author=usr)
+            poolobj = Pool(date=context['current_date'], name=p_name, author=request.user)
             poolobj.save()
 
             # Writing pool objects
