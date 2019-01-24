@@ -139,3 +139,24 @@ def logout_page(request):
     context = get_base_context(request)
     logout(request)
     return render(request, "logout.html", context)
+
+@login_required(login_url='/accounts/login/')
+def add_report(request):
+    context = {
+        'pagename': "Оставить жалобу"
+    }
+    user = User.objects.get()
+
+    if request.method == 'POST':
+        form = ReForm(request.POST)
+        if form.is_valid():
+            record = ReModel(
+                type=form.data['type'],
+                text=form.data['text'],
+                user=user
+            )
+            record.save()
+            context['addform'] = ReForm()
+    else:
+        context['addform'] = ReForm()
+    return render(request, 'pages/add_report.html', context)

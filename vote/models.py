@@ -18,3 +18,8 @@ class Author(models.Model):
     name = models.CharField(max_length=100)
     social = models.CharField(max_length=100)
     role = models.CharField(max_length=20, default='developer')
+
+class ReModel(models.Model):
+    type = models.CharField(max_length=200)
+    text = models.TextField(max_length=5000)
+    user = models.ForeignKey(to=User, default=1, on_delete=models.CASCADE)
