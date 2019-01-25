@@ -15,14 +15,15 @@ class Create_Pool(forms.Form):
                            max_length=100, required=False)
     variant_6 = forms.CharField(label="Шестой вариант:",
                            max_length=100, required=False)
-    variant_7=forms.CharField(label="Седьмой вариант:",
+    variant_7 = forms.CharField(label="Седьмой вариант:",
                            max_length=100, required=False)
-    variant_8=forms.CharField(label="Восьмой вариант:",
+    variant_8 = forms.CharField(label="Восьмой вариант:",
                            max_length=100, required=False)
-    variant_9=forms.CharField(label="Девятый вариант:",
+    variant_9 = forms.CharField(label="Девятый вариант:",
                            max_length=100, required=False)
-    variant_10=forms.CharField(label="Десятый вариант:",
+    variant_10 = forms.CharField(label="Десятый вариант:",
                            max_length=100, required=False)
+
 
 class User_auth(forms.Form):
     username = forms.CharField(

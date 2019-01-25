@@ -16,12 +16,11 @@ def get_base_context(request):
         'menu': [
             {'link': '/', 'text': 'Главная'},
             {'link': '/pools/create/', 'text': 'Создать опрос'},
-            {'link': '/pools/', 'text': 'Опросы'},
+            {'link': '/pools/', 'text': 'Опросы сайта'},
+            {'link': '/my_pools/', 'text': 'Мои опросы'},
             {'link': '/pools/edit/', 'text': 'Редактировать опрос'},
             {'link': '/accounts/user/', 'text': 'Аккаунт'},
-            {'link': '/accounts/logout/', 'text': 'Выйти'} if request.user.is_authenticated else
-            {'link': '/accounts/login/', 'text': 'Войти'},
-            {'link': '/creators/', 'text': 'Создатели'},
+            {'link': '/creators/', 'text': 'О нас'},
         ],
 
         'current_date': datetime.datetime.now().date(),
@@ -52,7 +51,7 @@ def pools_page(request):
     for i in range(0, len(all_pools)):
         lst.append([Pool_variant.objects.filter(belongs_to=all_pools[i]), all_pools[i]])
     context['pools'] = lst
-    return render(request, 'pools.html', context)
+    return render(request, 'pools/pools.html', context)
 
 
 @login_required(login_url='/accounts/login/')
@@ -88,7 +87,7 @@ def pool_create_page(request):
     else:
         # If we didn't had any data
         context['form'] = Create_Pool()
-    return render(request, 'create.html', context)
+    return render(request, 'pools/create.html', context)
 
 
 def login_page(request):
@@ -119,7 +118,7 @@ def login_page(request):
         else:
             # setting new form
             context["form"] = User_auth()
-    return render(request, "login.html", context)
+    return render(request, "accounts/login.html", context)
 
 
 @login_required(login_url='/accounts/login/')
@@ -128,11 +127,11 @@ def user(request):
     context['main_header'] = 'Информация об аккаунте:'
     context['username'] = request.user.username
     context['user_mail'] = request.user.email
-    context['user_status'] = 'Бог'
-    return render(request, 'user.html', context)
+    context['user_status'] = ''
+    return render(request, 'accounts/user.html', context)
 
-@login_required(login_url='/accounts/login/')
+
 def logout_page(request):
     context = get_base_context(request)
     logout(request)
-    return render(request, "logout.html", context)
+    return redirect(reverce("main-page"))
