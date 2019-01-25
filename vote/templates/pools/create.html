@@ -1,12 +1,6 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="UTF-8">
-		<title>{{ title }}</title>
-		<link rel="shortcut icon" href="{% static 'favicon.ico' %}">
-	</head>
-	
+{% block content %}
 	<style>
 	.hidden {
 		display: none;
@@ -28,9 +22,7 @@
 			}
 		}
 	</script>
-	
 	<body>
-		{% include "menu.html" %}
 		<h1>{{main_header}}</h1>
 		<hr>
 		<form action="/pools/create/" method="POST">
@@ -85,4 +77,4 @@
 			<input type="button" value="Убрать поле" onclick="del_variant()">
 		</form>
 	</body>
-</html>
+{% endblock %}

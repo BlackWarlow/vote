@@ -1,0 +1,26 @@
+{% load static %}
+<div>
+	<nav class="menu">
+		<ul class="topmenu">
+			<li><a href="{{ menu.0.link }}">{{ menu.0.text }}</a></li>
+			<li><a href="#">Опросы</a>
+				<ul class="submenu">
+					<li><a href="{{ menu.1.link }}">{{ menu.1.text }}</a></li>
+					<li><a href="{{ menu.2.link }}">{{ menu.2.text }}</a></li>
+					<li><a href="{{ menu.3.link }}">{{ menu.3.text }}</a></li>
+				</ul>
+			</li>
+			<li><a href="#">Аккаунт</a>
+				<ul class="submenu">
+					<li><a href="{{ menu.4.link }}">{{ menu.4.text }}</a></li>
+                    {% if user.is_authentificated %}
+                       <li><a href="{{ menu.5.link }}">Редактировать аккаунт</a></li>
+                       <li><a href="/accounts/logout">Выйти</a></li>
+                    {% else %}
+                       <li><a href="/accounts/login">Войти</a></li>
+                    {% endif %}
+	    		</ul>
+			</li>
+		</ul>
+	</nav>
+</div>

@@ -1,36 +1,62 @@
-body{
-    background: #222;
-    color: white;
+.menu {
+	padding-top: 5px;
+	position: absolute;
+	right: 10%;
 }
-.menu{
-    height: 46px;
-    margin-left: 2px;
-    width: 337px;
-    border-radius: 5px;
-    background: none;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
+
+ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
 }
-.dropdown{
-    padding-top: 0px;
+.topmenu > li {
+	display: inline-block;
+	margin-right: 20px;
+	position: relative;
 }
-.btn{
-    font-size: 16px;
-    background: #999;
-    color: #c255c255c255;
-    height: 45px;
+.topmenu > li:last-child {
+	margin-right: 0;
 }
-#main{
-    background: #999;
-    font-size: 16px;
-    text-align: center;
-    height: 46px;
-    margin-top: 0px;
+.fa {
+	font-family: FontAwesome;
+	color: inherit;
+	padding-left: 10px;
+	font-style: normal;
+	font-weight: normal;
+	text-decoration: inherit;
 }
-#logotype{
-    padding-top: 0px;
+.submenu {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	width: 100%;
+	z-index: 10;
 }
-img{
-    border-radius:5px;
+.menu ul {
+	color: white;
+	background-image: linear-gradient(to top, transparent, rgb(143, 143, 143));
+	border-radius: 2px;
+}
+.menu .submenu {
+	visibility: hidden;
+	opacity: 0;
+}
+.menu ul li:hover .submenu {
+	visibility: visible;
+	opacity: 1;
+	transition: .2s ease-out;
+	background-image: none;
+	background-color: transparent;
+}
+
+a {
+	display: block;
+	padding: 10px 15px;
+	text-decoration: none;
+	outline: none;
+}
+
+.submenu li a {
+	border-radius: 3px;
+	background-image: linear-gradient(to top, rgb(143, 143, 143), transparent);
 }
