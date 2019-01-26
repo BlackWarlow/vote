@@ -1,7 +1,12 @@
 {% load static %}
 <div>
 	<nav class="menu">
-		<ul class="topmenu no_select">
+		<div class="logo_holder inline">
+			<a href="{{ menu.0.link }}">
+				<i class="fa fa-check-square fa-2x"></i> <b>Simple </b><span>Votings</span>
+			</a>
+		</div>
+		<ul class="topmenu no_select inline">
 			<li><a href="{{ menu.0.link }}"><i class="fas fa-home"></i> {{ menu.0.text }}</a></li>
 			<li><a href="#">Опросы <i class="fas fa-caret-down "></i></a>
 				<ul class="submenu">

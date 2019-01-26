@@ -28,8 +28,8 @@ def get_base_context(request):
             {'link': '/donate/', 'text': 'Помощь'},
         ],
         'user': request.user,
-        'current_date': datetime.datetime.now().date(),
-        'current_time': datetime.datetime.now().time(),
+        'current_date': datetime.datetime.now().date().__str__(),
+        'current_time': datetime.datetime.now().time().__str__()[:8],
     }
     return context
 
