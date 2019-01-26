@@ -1,5 +1,24 @@
-<div id="messages">
-	{% if messages %}
-		lorem ipsum
-	{% endif %}
-</div>
+<style>
+	.messages {
+		list-style: none;
+	}
+	.messages li {
+		position: absolute;
+		top: 25px;
+		left: 25px;
+		border: 2px solid #2bb79e;
+		background-color: #2c7466;
+		border-radius: 10px;
+		padding: 10px;
+		display: table-cell;
+		font-size: 20px;
+	}
+</style>
+
+{% if messages %}
+	<ul class="messages">
+		{% for message in messages %}
+			<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+		{% endfor %}
+	</ul>
+{% endif %}

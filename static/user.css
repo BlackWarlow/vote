@@ -1,0 +1,18 @@
+img {
+	border-radius: 50px;
+	border: 2px solid #303030;
+}
+.info_wrapper {
+	color: black;
+   	margin-top: 40px;
+	padding: 30px;
+    background-image: linear-gradient(to top, transparent, #577798);
+    border-radius: 10px;
+}
+.menu_wrapper {
+	display: table;
+	margin-top: 15px;
+}
+.alter_link {
+	min-width: 120px;
+}

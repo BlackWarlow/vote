@@ -1,57 +1,24 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Аккаунт</title>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-</head>
+{% block content %}
 
-<style>
-    body {background-color: #222 !important; font-family: Arial, sans-serif !important; color: black !important;}
-    .info_wrapper {
-    	margin-top: 40px;
-		margin-left: 20%;
-		margin-right: 20%;
-		padding: 30px;
-        background-color: #F0F8FF;
-        border-radius: 10px;
-    }
-	.menu_wrapper {
-		display: table;
-		margin-left: 37%;
-		margin-top: 15px;
-		height: 20px;
-	}
-	.inline {display: inline-block; margin-right: 30px;}
-	.container {
-		min-width: 100px;
-		max-width: 250px !important;
-		text-align: center !important;
-		padding: 2px;
-		font-size: 17px;
-		opacity: 0.8 !important;
-		border-radius: 5px;
-	}
-	.container:hover {background-color: #7B97AF;}
-	.alter_link {text-decoration: none; color: white !important;}
-</style>
+<link rel="stylesheet" href="{% static 'user.css' %}">
 
 <body>
-	{% include "menu.html" %}
+	<h1>{{ main_header }}</h1>
 	<div class="info_wrapper">
-		<div><h1>{{ main_header }}</h1></div>
-		<div id="name"><h3>● Имя: {{ username }}</h3></div>
-		<div id="mail"><h3>● Почта: {{ user_mail }}</h3></div>
-		<div id="status"><h3>● Статус: {{ user_status }}</h3></div>
+		<center><div><img title="Ы" height="100" width="100" src="{% static 'def_user.png' %}" alt="Аватарка"></div></center>
+		<div><h3><i class="fa fa-circle fa-xs"></i> Ник на сайте: <span>{{ username }}</span></h3></div>
+		<div><h3><i class="fa fa-circle fa-xs"></i> Почта: <span>{{ user_mail }}</span></h3></div>
+		<div><h3><i class="fa fa-circle fa-xs"></i> Имя: <span>{{ username }}</span></h3></div>
+		<div><h3><i class="fa fa-circle fa-xs"></i> Фамилия: <span>{{ username }}</span></h3></div>
+		<div><h3><i class="fa fa-circle fa-xs"></i> Статус: <span>{{ user_status }}<span></h3></div>
 	</div>
-
-    <div class="menu_wrapper">
-		<a href="http://localhost:8000/accounts/edit/"><div class="inline container alter_link">Редактировать</div></a>
-		<a href="http://localhost:8000/accounts/history/"><div class="inline container alter_link">История действий</div></a>
-		<a href="http://localhost:8000/accounts/logout/"><div class="inline container alter_link">Выйти</div></a>
-    </div>
-	</center>
+	
+	<center><div class="menu_wrapper">
+		<a href="{{ menu.7.link }}"><div class="inline button no_select alter_link">{{ menu.7.text }}</div></a>
+		<a href="{{ menu.5.link }}"><div class="inline button warn no_select alter_link">{{ menu.5.text }}</div></a>
+	</div></center>
 
 </body>
-</html>
+{% endblock %}

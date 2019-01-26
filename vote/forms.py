@@ -27,5 +27,5 @@ class Create_Pool(forms.Form):
 
 class User_auth(forms.Form):
     username = forms.CharField(
-        label="Имя пользователя", min_length=1, max_length=25, required=True)
-    password = forms.CharField(label="Пароль", widget=forms.PasswordInput())
+        label="Имя пользователя:", min_length=1, max_length=25, required=True)
+    password = forms.CharField(label="Пароль:", widget=forms.PasswordInput())

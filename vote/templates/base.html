@@ -7,13 +7,20 @@
 		<link rel="shortcut icon" href="{% static 'favicon.ico' %}">
 		<link rel="stylesheet" href="{% static 'base.css' %}">
 		<link rel="stylesheet" href="{% static 'menu.css' %}">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     </head>
 
     <body>
         {% include 'header.html' %}
+		{% include 'messages.html' %}
 		
-		{% block content %}
-		{% endblock %}
+		<main>
+		    {% block content %}
+		    {% endblock %}
+		</main>
 		
+		<footer>
+			{% include 'footer.html' %}
+		</footer>
     </body>
 </html>

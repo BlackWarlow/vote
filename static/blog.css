@@ -1,0 +1,10 @@
+.quote {
+	border: 1px solid white;
+	border-radius: 5px;
+}
+.quote div p {
+	margin-left: 40px;
+}
+.quote div p:first-letter {
+	margin-left: -20px;
+}

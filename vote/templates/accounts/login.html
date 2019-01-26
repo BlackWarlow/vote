@@ -1,34 +1,42 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
-    <body>
-		<div style="text-align: center;">
-		</div>
-		<h1>{{ main_header }}</h1>
-		<div class="main_text">
-			{% if not logged_in %}
-			
-				<form action="/accounts/login/" method="POST">
-					{% csrf_token%}
-					{{ form.username.label }}<br>
-					{{ form.username }}<br>
-					{{ form.password.label }}<br>
-					{{ form.password }}<br>
+<link rel="stylesheet" href="{% static 'login.css' %}">
+<body>
+	<h1>{{ main_header }}</h1>
+	<div class="main_text">
+		{% if not user.is_authenticated %}
+			<form action="/accounts/login/" method="POST">
+				{% csrf_token%}
+				<div class="cl_container">
+					{% if form.errors or error %}
+						<div class="msg_warning">Ошибка входа, неверные имя пользователя или пароль!</div>
+					{% endif %}
+					<center>
+					<div class="input_wrapper">
+						<div class="user_input">
+							{{ form.username.label }}<br>
+							{{ form.username }}
+						</div>
+						<div class="user_input">
+							{{ form.password.label }}<br>
+							{{ form.password }}
+						</div>
+					</div>
 					<input class="button" type="submit" value="Войти на сайт">
-					{% if form.errors %}
-						<br><br>
-						<span style="color: red;">Ошибка входа, неверные имя пользователя или пароль!</span>
-					{% endif %}
-					{% if error %}
-						<br><br>
-						<span style="color: red;">Ошибка входа, неверные имя пользователя или пароль!</span>
-					{% endif %}
-				</form>
+					</center>
+				</div>
+			</form>
 				
-			{% else %}
-				Вы уже авторизовались, нажмите, чтобы выйти
-				<a href="/accounts/logout/">Выйти</a>
-			{% endif %}
-			<p>Сегодня {{ current_date }}.
-		</div>
-    </body>
+		{% else %}
+			<div class="cl_container">
+				<center>
+				Вы уже авторизованы как <b>{{ user.username }}</b>, нажмите, чтобы выйти
+				<a style="display: table-cell;" href="{{ menu.5.link }}"><div class="button warn no_select">Выйти</div></a>
+				</center>
+			</div>
+		{% endif %}
+	</div>
+</body>
 {% endblock %}

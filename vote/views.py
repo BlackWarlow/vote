@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, AnonymousUser
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 from django.urls import reverse
 
@@ -17,12 +18,16 @@ def get_base_context(request):
             {'link': '/', 'text': 'Главная'},
             {'link': '/pools/create/', 'text': 'Создать опрос'},
             {'link': '/pools/', 'text': 'Опросы сайта'},
-            {'link': '/my_pools/', 'text': 'Мои опросы'},
-            {'link': '/pools/edit/', 'text': 'Редактировать опрос'},
             {'link': '/accounts/user/', 'text': 'Аккаунт'},
+            {'link': '/my_pools/', 'text': 'Мои опросы'},
+            {'link': '/accounts/logout/', 'text': 'Выйти'},
+            {'link': '/accounts/login/', 'text': 'Войти'},
+            {'link': '/accounts/edit/', 'text': 'Редактировать'},
             {'link': '/creators/', 'text': 'О нас'},
+            {'link': '/contacts/', 'text': 'Контакты'},
+            {'link': '/donate/', 'text': 'Помощь'},
         ],
-
+        'user': request.user,
         'current_date': datetime.datetime.now().date(),
         'current_time': datetime.datetime.now().time(),
     }
@@ -30,21 +35,21 @@ def get_base_context(request):
 
 def index_page(request):
     context = get_base_context(request)
-    context['title'] = 'Главная страница - Simple Votings'
+    context['title'] = 'Главная страница - SV'
     context['main_header'] = 'Simple votings'
     return render(request, 'index.html', context)
 
 def creators_page(request):
     context = get_base_context(request)
-    context['title'] = 'SV - Создатели'
-    context['main_header'] = 'Simple votings - The Django project by "The Blade Of Knowledge"'
+    context['title'] = 'Создатели - SV'
+    context['main_header'] = 'Simple votings - Django Python проект группы "Лезвие знаний"'
     context['authors'] = Author.objects.all()
     return render(request, 'creators.html', context)
 
 
 def pools_page(request):
     context = get_base_context(request)
-    context['title'] = 'SV - Список опросов'
+    context['title'] = 'Список опросов - SV'
     context['main_header'] = 'Список опросов на сайте'
     all_pools = Pool.objects.all()
     lst = []
@@ -57,7 +62,7 @@ def pools_page(request):
 @login_required(login_url='/accounts/login/')
 def pool_create_page(request):
     context = get_base_context(request)
-    context['title'] = 'SV - Создать опрос'
+    context['title'] = 'Создать опрос - SV'
     context['main_header'] = 'Создание опроса'
 
     if request.method == 'POST':
@@ -92,10 +97,10 @@ def pool_create_page(request):
 
 def login_page(request):
     context = get_base_context(request)
-    if request.user.is_authenticated:
-        # if user is logged in
-        context["logged_in"] = True
-    else:
+    context['title'] = 'Войти - SV'
+    context['main_header'] = 'Вход на сайт'
+
+    if not request.user.is_authenticated:
         if request.method == "POST":
             # if user is entered something in the form
             formm = User_auth(request.POST)
@@ -106,6 +111,8 @@ def login_page(request):
                 if user is not None:
                     # if user exists login
                     login(request, user)
+                    messages.add_message(
+                        request, messages.INFO, 'Вы успешно авторизовались.')
                     return redirect(reverse('main-page'))
                 else:
                     # if password or username is not valid
@@ -132,6 +139,5 @@ def user(request):
 
 
 def logout_page(request):
-    context = get_base_context(request)
     logout(request)
-    return redirect(reverce("main-page"))
+    return redirect("main-page")

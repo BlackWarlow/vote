@@ -13,6 +13,8 @@ ul {
 	display: inline-block;
 	margin-right: 20px;
 	position: relative;
+	min-width: 170px;
+	text-align: center;
 }
 .topmenu > li:last-child {
 	margin-right: 0;
@@ -34,19 +36,20 @@ ul {
 }
 .menu ul {
 	color: white;
-	background-image: linear-gradient(to top, transparent, rgb(143, 143, 143));
-	border-radius: 2px;
+	background-image: linear-gradient(to top, transparent, #577798);
+	border-radius: 3px;
 }
 .menu .submenu {
 	visibility: hidden;
 	opacity: 0;
+	border-radius: 3px;
 }
 .menu ul li:hover .submenu {
 	visibility: visible;
 	opacity: 1;
 	transition: .2s ease-out;
 	background-image: none;
-	background-color: transparent;
+	background-color: #303030;
 }
 
 a {
@@ -58,5 +61,12 @@ a {
 
 .submenu li a {
 	border-radius: 3px;
-	background-image: linear-gradient(to top, rgb(143, 143, 143), transparent);
+	background-image: linear-gradient(to top, #577798, transparent);
+}
+
+.menu_warn {
+	color: #f99;
+}
+.menu_warn:hover {
+	background-image: linear-gradient(to top, #f99, transparent);
 }

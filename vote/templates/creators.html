@@ -1,22 +1,55 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="UTF-8">
-		<title>{{ title }}</title>
-		<link rel="shortcut icon" href="{% static 'favicon.ico' %}">
-	</head>
+{% block content %}
+<link href="{% static 'creators.css' %}" rel="stylesheet"/>
 	
-	<body>
-		{% include "menu.html" %}
-		<h1>{{main_header}}</h1>
-		<hr>
-		<h3>Авторы проекта:</h3>
-		<ul>
-		{% for auth in authors %}
-			<li><a href="{{ auth.social }}">{{ auth.name }}</a></li>
-		{% endfor %}
-		</ul>
-		<hr>
-	</body>
-</html>
+<body>
+	<div class="about-us">
+		<h2>Лезвие знаний</h2>
+		<p>"Работали все"
+			<span>но реально тащили 4 человека</span></p>
+	</div>
+	
+	<div class="about-grids">
+	
+		<div class="about-grid">
+			<img src="{% static '121.jpg' %}"/>
+			<div class="about-grid-john">
+				<div class="john">
+                    <h4><font color="white" >Name</font></h4>
+                    <p><font color="#ecebed" >Position</font></p>
+				</div>
+				<div class="social-icons">
+					<ul>
+						<li><a href class="facebook"> </a></li>
+						<li><a href class="twitter"> </a></li>
+						<li><a href class="vk"> </a></li>
+					</ul>
+				</div>
+				<div class="clearfix"> </div>
+                <p class="para"><font color="#ecebed" >Description</font></p>
+			</div>
+		</div>
+		
+		<div class="about-grid about-mid">
+			<img src="{% static '121.jpg' %}"/>
+			<div class="about-grid-john">
+				<div class="john">
+                    <h4><font color="white" >Name</font></h4>
+                    <p><font color="#ecebed" >Position</font></p>
+				</div>
+				<div class="social-icons">
+					<ul>
+						<li><a href class="facebook"> </a></li>
+						<li><a href class="twitter"> </a></li>
+						<li><a href class="vk"> </a></li>
+					</ul>
+				</div>
+				<div class="clearfix"> </div>
+                <p class="para"><font color="#ecebed" >Description</font></p>
+			</div>
+		</div>
+		
+	</div>
+</body>
+{% endblock %}
