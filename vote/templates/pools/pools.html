@@ -1,4 +1,13 @@
-{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>{{ title }}</title>
+		<link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+		<link rel="stylesheet" href="{% static 'menu.css' %}">
+	</head>
+	
 	<style>
 		.pool_container {
 			width: 66%;
@@ -33,7 +42,30 @@
 			background-color: #F0F8FF;
 		}
 	</style>
-{% block content %}
+
+	<script>
+		function add_vote(){
+			var inp = document.getElementsByName('optionsRadios');
+			for (var i = 0; i < inp.length; i++) {
+				if (inp[i].type == "radio" && inp[i].checked) {
+					var a = document.getElementById(inp[i].id+"progress");
+					a.value = a.value + 1;
+					a.max = a.max + 1
+					var b = document.getElementById(inp[i].id+"counter");
+					b.innerHTML = parseInt(b.innerHTML)+1;
+					var c = document.getElementById(inp[i].id+"call");
+					c.innerHTML =  "|УСПЕШНО ОТДАН ВАШ ГОЛОС ЗА ДАННЫЙ ВАРИАНТ|";
+				}
+			}
+		}
+		
+		function disableIt(id){
+			document.getElementById(id).setAttribute('disabled', true);
+		}
+
+			
+	</script>
+	
 	<body>
 		<h1>{{main_header}}</h1>
 		<hr>
@@ -43,11 +75,23 @@
 			<li>{{ pool.1.name }}</li>
 			<ul>
 				{% for variant in pool.0 %}
-					<li>{{ variant.variant_name }} - {{ variant.votes }}</li>
+					<label class="form-check-label">
+						<input type="radio" class="form-check-input" name="optionsRadios" id = "{{ variant.variant_name }}">
+						<a href = "/" <!== Тут должна быть ссылка на просмотр самого опроса==>{{ variant.variant_name }}</a><br>Количество голосов: <b id = "{{ variant.variant_name }}counter">{{ variant.votes }}</b>
+					 </label>
+					</div>
+					<progress class="progress progress-info" value="{{ variant.votes }}" max="100" id = "{{ variant.variant_name }}progress"></progress>
+					<b id = "{{ variant.variant_name }}call"></b>
+					<br>
 				{% endfor %}
 			</ul>
+				<div class="col">
+                    <input type="button" value="Голосовать" onclick="add_vote(); disableIt('{{ pool.1.id }}');" id = "{{ pool.1.id }}" >
+                </div>
+			<br>
+
 		{% endfor %}
 		</ul>
 
 	</body>
-{% endblock %}
+</html>
