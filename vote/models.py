@@ -9,6 +9,9 @@ class Pool(models.Model):
     name = models.CharField(max_length=100)
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return 'pool <' + str(self.name) + '>'
+
 class Pool_variant(models.Model):
     variant_name = models.CharField(max_length=100)
     votes = models.IntegerField()
