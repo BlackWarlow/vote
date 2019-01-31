@@ -46,6 +46,11 @@ def creators_page(request):
     context['authors'] = Author.objects.all()
     return render(request, 'creators.html', context)
 
+def contacts_page(request):
+    context= get_base_context(request)
+    context['title']= 'Контакты - SV'
+    context['main_header'] = 'Simple votings - Контакты'
+    return render(request, 'contacts.html',context)
 
 def polls_page(request):
     context = get_base_context(request)

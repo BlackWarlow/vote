@@ -33,4 +33,5 @@ urlpatterns = [
     path('accounts/user/', views.user),
     path('accounts/edit/', views.user_edit),
     path('add_reprot/', views.add_report),
+    path('contacts/', views.contacts_page)
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

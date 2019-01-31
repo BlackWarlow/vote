@@ -43,5 +43,3 @@ class Report_Form(forms.Form):
         )
     )
 
-
-class User_Register(forms.Form):
