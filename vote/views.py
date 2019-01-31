@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, AnonymousUser
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 
 from django.urls import reverse
@@ -71,8 +72,6 @@ def view_poll(request, id):
     lst.append(Poll_variant.objects.filter(belongs_to=poll))
     lst.append(poll)
     context['poll'] = lst
-
-
     return render(request, 'polls/poll.html', context)
 
 
@@ -94,6 +93,7 @@ def poll_create_page(request):
             pollobj = Poll(date=context['current_date'],
                            name=p_name, author=request.user)
             pollobj.save()
+            poll_id = pollobj.id
 
             # Writing poll objects
             for i in range(1, 11):
@@ -105,6 +105,9 @@ def poll_create_page(request):
                     Poll_variant(variant_name=cur_name, votes=0,
                                  belongs_to=pollobj).save()
             context['form'] = form
+            messages.add_message(
+                request, messages.INFO, 'Опрос добавлен.')
+            return redirect('/poll/' + str(poll_id) + '/')
         else:
             context['form'] = form
     else:
@@ -166,30 +169,31 @@ def user_register(request):
     context['main_header'] = 'Регистрация на сайте'
 
     if not request.user.is_authenticated:
-        if request.method == "POST":
-            # if user is entered something in the form
-            formm = User_auth(request.POST)
-            if formm.is_valid():
-                # if everything is entered as it should be
-                user = authenticate(request, username=request.POST["username"],
-                                   password=request.POST["password"])
-                if user is not None:
-                    # if user exists login
-                    login(request, user)
-                    messages.add_message(
-                        request, messages.INFO, 'Вы успешно авторизовались.')
-                    return redirect(reverse('main-page'))
-                else:
-                    # if password or username is not valid
-                    context["error"] = True
+        if request.method == 'POST':
+            form = UserCreationForm(request.POST)
+            email_form = User_Email_Form(request.POST)
+            if form.is_valid() and email_form.is_valid():
+                new_user = form.save()
+                new_user.email = request.POST['email']
+                new_user.save()
+                messages.add_message(
+                    request, messages.INFO, 'Вы зарегестрированы на сайте, чтобы продолжить войдите.')
+                return redirect("/accounts/login/")
             else:
-                # if entered data is not valid
-                context["error"] = True
-            # setting displayed form
-            context["form"] = formm
+                errs = form.errors
+                lst = []
+                if 'username' in errs:
+                    lst.append(
+                       'Пользователь с таким ником уже существует')
+                if 'password2' in errs:
+                    lst.append(
+                       'Пароли не удовлетворяют критериям безопасности или не совпадают')
+                context['errors'] = lst
+            context['form'] = form
+            context['email_form'] = email_form
         else:
-            # setting new form
-            context["form"] = User_auth()
+            context['form'] = UserCreationForm()
+            context['email_form'] = User_Email_Form()
     return render(request, 'accounts/register.html', context)
 
 
@@ -210,7 +214,7 @@ def add_report(request):
         form = Report_Form(request.POST)
         if form.is_valid():
             record = Report_Model(
-                type=form.data['type'],
+                theme=form.data['type'],
                 text=form.data['text'],
                 user=user
             )

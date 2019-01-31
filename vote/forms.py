@@ -23,7 +23,7 @@ class User_Auth(forms.Form):
 
 
 class Report_Form(forms.Form):
-    type = forms.CharField(
+    theme = forms.CharField(
         label='Тема жалобы',
         max_length=200,
         widget=forms.TextInput(
@@ -43,5 +43,5 @@ class Report_Form(forms.Form):
         )
     )
 
-
-class User_Register(forms.Form):
+class User_Email_Form(forms.Form):
+    email = forms.EmailField(required=True)

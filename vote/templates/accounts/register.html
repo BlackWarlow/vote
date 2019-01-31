@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Регистрация пользователя</h1>
+    <div class="cl_container">
+        <form action="." method="post">
+	        {% csrf_token %}
+			
+	        {% for error in errors %}
+	        	<div class="msg_warning">{{ error }}</div>
+	        {% endfor %}
+			
+			<center>
+            <label for="id_username">Логин:</label><br>
+	        {{ form.username }}<br>
+	        
+	        <label for="id_username">Почта:</label><br>
+	        {{ email_form.email }}<br>
+            
+            <label for="id_password1">Пароль:</label><br>
+	        {{ form.password1 }}<br>
+            
+            <label for="id_password2">Пароль ( снова ):</label><br>
+	        {{ form.password2 }}<br>
+            
+            <input class="button no_select" type="submit" value="Зарегистрироваться">
+			</center>
+			
+        </form>
+    </div>
+{% endblock %}

@@ -43,6 +43,15 @@ a {
 	color: black;
 }
 
+.msg_warning {
+	color: #da5656;
+	border: 1px solid #da5656;
+	background-color: #5f2626;
+	border-radius: 3px;
+	padding: 10px;
+	margin-bottom: 10px;
+}
+
 .warn {
 	border-color: #f99 !important;
 }
