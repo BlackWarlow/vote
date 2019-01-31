@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+	<style>
+	.hidden {
+		display: none;
+		margin-top: 3px;
+	}
+	input {
+		border-radius: 3px;
+		width: 200px;
+	}
+	.add_sign {
+		padding: 0px;
+	}
+	#add_btn, #create_btn {
+		display: inline-table;
+		margin-right: 10px;
+		margin-top: 5px;
+		max-width: 100px;
+	}
+	.del_btn {
+		cursor: pointer;
+	}
+	.variant {
+		margin-top: 3px;
+	}
+	#default_variants {
+		margin-top: 5px;
+	}
+	</style>
+	
+	<script>
+		var variants = []
+		for (var i=2; i<10; ++i){
+			variants[i] = false;
+		}
+		function add_variant(){
+			if (variants[9] == true){
+				document.getElementById('add_btn').style = 'display: none;';
+			}
+			var n = 0;
+			for (var i=2; i<10; ++i){
+				if (variants[i] == false){
+					variants[i] = true;
+					n = i+1;
+					break;
+				}
+			}
+			document.getElementById(n+'').style.display = 'block';
+		}
+		
+		function delete_variant(id){
+			if (variants[9] == true){
+				document.getElementById('add_btn').style = 'display: inline-table;';
+			}
+			variants[id-1] = false;
+			document.getElementById('id_variant_'+id).value = '';
+			document.getElementById(id+'').style = 'display: none;';
+		}
+	</script>
+	<body>
+		<h1>{{main_header}}</h1>
+		<hr>
+		<div class="cl_container">
+		<form action="/pools/create/" method="POST">
+			{% csrf_token %}
+			<div id='pool_name'>
+				{{ form.name.label }}<br>
+				{{ form.name }}<br>
+			</div>
+			<div id='default_variants'>
+				Варианты ответов:<br>
+				{{ form.variant_1 }}
+				<div class="variant">{{ form.variant_2 }}</div>
+			</div>
+			<div id='3' class="hidden variant">
+				{{ form.variant_3 }}
+				<span class="del_btn"><i class="fa fa-trash-alt" onclick="delete_variant(3)"></i></span>
+			</div>
+			<div id='4' class="hidden variant">
+				{{ form.variant_4 }}
+				<span class="del_btn"><i class="fa fa-trash-alt" onclick="delete_variant(4)"></i></span>
+			</div>
+			<div id='5' class="hidden variant">
+				{{ form.variant_5 }}
+				<span class="del_btn"><i class="fa fa-trash-alt" onclick="delete_variant(5)"></i></span>
+			</div>
+			<div id='6' class="hidden variant">
+				{{ form.variant_6 }}
+				<span class="del_btn"><i class="fa fa-trash-alt" onclick="delete_variant(6)"></i></span>
+			</div>
+			<div id='7' class="hidden variant">
+				{{ form.variant_7 }}
+				<span class="del_btn"><i class="fa fa-trash-alt" onclick="delete_variant(7)"></i></span>
+			</div>
+			<div id='8' class="hidden variant">
+				{{ form.variant_8 }}
+				<span class="del_btn"><i class="fa fa-trash-alt" onclick="delete_variant(8)"></i></span>
+			</div>
+			<div id='9' class="hidden variant">
+				{{ form.variant_9 }}
+				<span class="del_btn"><i class="fa fa-trash-alt" onclick="delete_variant(9)"></i></span>
+			</div>
+			<div id='10' class="hidden variant">
+				{{ form.variant_10 }}
+				<span class="del_btn"><i class="fa fa-trash-alt" onclick="delete_variant(10)"></i></span>
+			</div>
+			<div class="create_controls">
+				<div onclick="add_variant()" class="no_select button" id="add_btn"><i class='fa fa-plus add_sign'></i></div>
+				<input class="button no_select inline" id="create_btn" type="submit" value="Создать!">
+			</div>
+		</form>
+		</div>
+	</body>
+{% endblock %}

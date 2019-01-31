@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 
-<link rel="stylesheet" href="{% static 'user.css' %}">
+<link rel="stylesheet" href="{% static 'css/user.css' %}">
 
 <body>
 	<h1>{{ main_header }}</h1>
@@ -16,8 +16,8 @@
 	</div>
 	
 	<center><div class="menu_wrapper">
-		<a href="{{ menu.7.link }}"><div class="inline button no_select alter_link">{{ menu.7.text }}</div></a>
-		<a href="{{ menu.5.link }}"><div class="inline button warn no_select alter_link">{{ menu.5.text }}</div></a>
+		<a class="inline" href="{{ menu.7.link }}"><div class="button alter_link no_select">{{ menu.7.text }}</div></a>
+		<a class="inline" href="{{ menu.5.link }}"><div class="button alter_link warn no_select">{{ menu.5.text }}</div></a>
 	</div></center>
 
 </body>

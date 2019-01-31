@@ -5,6 +5,8 @@
 <link rel="stylesheet" href="{% static 'login.css' %}">
 <body>
 	<h1>{{ main_header }}</h1>
+	<hr>
+	
 	<div class="main_text">
 		{% if not user.is_authenticated %}
 			<form action="/accounts/login/" method="POST">

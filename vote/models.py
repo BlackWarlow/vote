@@ -3,7 +3,7 @@ from django.db import models
 
 # Create your models here.
 
-class Pool(models.Model):
+class Poll(models.Model):
     date = models.DateField(default="2000-01-01")
     time = models.TimeField(default="00:00:00")
     name = models.CharField(max_length=100)
@@ -12,17 +12,20 @@ class Pool(models.Model):
     def __str__(self):
         return 'pool <' + str(self.name) + '>'
 
-class Pool_variant(models.Model):
+class Poll_variant(models.Model):
     variant_name = models.CharField(max_length=100)
     votes = models.IntegerField()
-    belongs_to = models.ForeignKey(to=Pool, default='none', on_delete=models.CASCADE)
+    belongs_to = models.ForeignKey(
+        to=Poll, default='none', on_delete=models.CASCADE)
 
 class Author(models.Model):
     name = models.CharField(max_length=100)
     social = models.CharField(max_length=100)
     role = models.CharField(max_length=20, default='developer')
 
-class ReModel(models.Model):
+class ReportModel(models.Model):
+    poll_id = models.ForeignKey(
+        to=Poll, default='none', on_delete=models.CASCADE)
     type = models.CharField(max_length=200)
     text = models.TextField(max_length=5000)
     user = models.ForeignKey(to=User, default=1, on_delete=models.CASCADE)

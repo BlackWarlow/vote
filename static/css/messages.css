@@ -1,0 +1,17 @@
+.messages {
+	list-style: none;
+}
+#msg {
+	position: absolute;
+	top: 45px;
+	left: 45px;
+	border: 2px solid #2bb79e;
+	background-color: #2c7466;
+	border-radius: 10px;
+	padding: 7px;
+	display: table-cell;
+	font-size: 20px;
+}
+#close_btn {
+	cursor: pointer;
+}

@@ -1,24 +1,10 @@
-<style>
-	.messages {
-		list-style: none;
-	}
-	.messages li {
-		position: absolute;
-		top: 25px;
-		left: 25px;
-		border: 2px solid #2bb79e;
-		background-color: #2c7466;
-		border-radius: 10px;
-		padding: 10px;
-		display: table-cell;
-		font-size: 20px;
-	}
-</style>
-
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/messages.css' %}">
+<link rel="script" href="{% static 'hide_msg.js' %}">
 {% if messages %}
 	<ul class="messages">
 		{% for message in messages %}
-			<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+			<li{% if message.tags %} class="{{ message.tags }}"{% endif %} id="msg">{{ message }} <span id="close_btn" onclick='close_msg("msg")'><i class="fa fa-times"></i></span></li>
 		{% endfor %}
 	</ul>
 {% endif %}

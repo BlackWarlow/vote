@@ -26,6 +26,7 @@ a {
 }
 
 .button {
+	cursor: pointer;
 	background-color: transparent;
 	font-size: 16px;
 	padding: 10px;
