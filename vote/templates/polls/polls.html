@@ -35,47 +35,49 @@
 		border-radius: 5px;
 		background-color: #F0F8FF;
 	}
-</style>
+	.progress-title{
+		font-size: 17px;
+		font-weight: 700;
+		color: white;
+		text-transform: uppercase;
+	}
+	.progress{
+		height: 19px;
+		color: #577798;
+		background: #303030;
+		position: relative;
+	}
+	.progress .progress-bar{
+		position: relative;
+		color: #577798;
+		background: #577798;
+	}
+	.progress .progress-value{
+		color: grey;
+	}
+	</style>
 
-<script>
-	function add_vote(){
-		var input = document.getElementsByName('optionsRadios');
-		for (var i = 0; i < input.length; i++) {
-			if (input[i].type == "radio" && input[i].checked) {
-			
-				var prog = document.getElementById(input[i].id+"progress");
-				prog.value = a.value + 1;
-				prog.max = a.max + 1;
-				
-				var count = document.getElementById(input[i].id+"counter");
-				count.innerHTML = parseInt(b.innerHTML)+1;
-				
-				var vote = document.getElementById(input[i].id+"vote");
-				vote.innerHTML =  "|ВАШ ГОЛОС УСПЕШНО ОТДАН ЗА ДАННЫЙ ВАРИАНТ|";
-			}
-		}
-	}
-	
-	function disableIt(id){
-		document.getElementById(id).setAttribute('disabled', true);
-	}
-</script>
-	
 <body>
 	<h1>{{main_header}}</h1>
 	<hr>
 	
 	<ul>
 	{% for poll in polls%}
-		<li>{{ poll.1.name }}</li>
-		<ul>
-			{% for variant in poll.0 %}
-				<a href = "/" >{{ variant.variant_name }}</a>
-				Количество голосов: <b id = "{{ variant.variant_name }}counter">{{ variant.votes }}</b>
-				<progress class="progress progress-info" value="{{ variant.votes }}" max="100" id = "{{ variant.variant_name }}progress"></progress>
-				<b id="{{ variant.variant_name }}vote"></b>
-			{% endfor %}
-		</ul>
+		<div class="post cl_container">
+			<h2  href = "/">{{ poll.1.name }}</h2>
+
+				{% for variant in poll.0 %}
+					<big class = "progress-title">{{ variant.variant_name }}</big>
+					<br>
+					<div class = "progress">
+						<div class="progress-bar" style="width:{{ variant.votes }}%; background:#1a4966;">
+							<div class="progress-value"> <nobr> {{ variant.votes }} votes</nobr></div>
+						</div>
+					</div>
+					<br>
+				{% endfor %}
+
+		</div>
 	{% endfor %}
 	</ul>
 
