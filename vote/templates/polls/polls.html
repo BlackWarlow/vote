@@ -39,16 +39,19 @@
 
 <script>
 	function add_vote(){
-		var inp = document.getElementsByName('optionsRadios');
-		for (var i = 0; i < inp.length; i++) {
-			if (inp[i].type == "radio" && inp[i].checked) {
-				var a = document.getElementById(inp[i].id+"progress");
-				a.value = a.value + 1;
-				a.max = a.max + 1
-				var b = document.getElementById(inp[i].id+"counter");
-				b.innerHTML = parseInt(b.innerHTML)+1;
-				var c = document.getElementById(inp[i].id+"call");
-				c.innerHTML =  "|ВАШ ГОЛОС УСПЕШНО ОТДАН ЗА ДАННЫЙ ВАРИАНТ|";
+		var input = document.getElementsByName('optionsRadios');
+		for (var i = 0; i < input.length; i++) {
+			if (input[i].type == "radio" && input[i].checked) {
+			
+				var prog = document.getElementById(input[i].id+"progress");
+				prog.value = a.value + 1;
+				prog.max = a.max + 1;
+				
+				var count = document.getElementById(input[i].id+"counter");
+				count.innerHTML = parseInt(b.innerHTML)+1;
+				
+				var vote = document.getElementById(input[i].id+"vote");
+				vote.innerHTML =  "|ВАШ ГОЛОС УСПЕШНО ОТДАН ЗА ДАННЫЙ ВАРИАНТ|";
 			}
 		}
 	}
@@ -67,21 +70,15 @@
 		<li>{{ poll.1.name }}</li>
 		<ul>
 			{% for variant in poll.0 %}
-				<label class="form-check-label">
-					<input type="radio" class="form-check-input" name="optionsRadios" id = "{{ variant.variant_name }}">
-					<a href = "/" >{{ variant.variant_name }}</a><br>Количество голосов: <b id = "{{ variant.variant_name }}counter">{{ variant.votes }}</b>
-				 </label>
-				</div>
+				<a href = "/" >{{ variant.variant_name }}</a>
+				Количество голосов: <b id = "{{ variant.variant_name }}counter">{{ variant.votes }}</b>
 				<progress class="progress progress-info" value="{{ variant.votes }}" max="100" id = "{{ variant.variant_name }}progress"></progress>
-				<b id = "{{ variant.variant_name }}call"></b>
-				<br>
+				<b id="{{ variant.variant_name }}vote"></b>
 			{% endfor %}
 		</ul>
 			<div class="col">
                    <input type="button" value="Пролосовать" onclick="add_vote(); disableIt('{{ pool.1.id }}');" id="{{ pool.1.id }}">
             </div>
-		<br>
-
 	{% endfor %}
 	</ul>
 

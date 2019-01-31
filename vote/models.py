@@ -10,7 +10,7 @@ class Poll(models.Model):
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return 'pool <' + str(self.name) + '>'
+        return 'poll <' + str(self.name) + '>'
 
 class Poll_variant(models.Model):
     variant_name = models.CharField(max_length=100)
@@ -23,7 +23,7 @@ class Author(models.Model):
     social = models.CharField(max_length=100)
     role = models.CharField(max_length=20, default='developer')
 
-class ReportModel(models.Model):
+class Report_Model(models.Model):
     poll_id = models.ForeignKey(
         to=Poll, default='none', on_delete=models.CASCADE)
     type = models.CharField(max_length=200)

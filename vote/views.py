@@ -47,13 +47,14 @@ def creators_page(request):
     return render(request, 'creators.html', context)
 
 
-def pools_page(request):
+def polls_page(request):
     context = get_base_context(request)
     context['title'] = 'Список опросов - SV'
     context['main_header'] = 'Список опросов на сайте'
     all_polls = Poll.objects.all()
     lst = []
-    for i in range(0, len(all_pools)):
+    max_polls = min(15, len(all_polls))
+    for i in range(0, max_polls):
         lst.append(
             [Poll_variant.objects.filter(
                 belongs_to=all_polls[i]),
@@ -63,8 +64,20 @@ def pools_page(request):
     return render(request, 'polls/polls.html', context)
 
 
+def view_poll(request, id):
+    context = get_base_context(request)
+    poll = Poll.objects.filter(id=id)
+    lst = []
+    lst.append(Poll_variant.objects.filter(belongs_to=poll))
+    lst.append(poll)
+    context['poll'] = lst
+
+
+    return render(request, 'polls/poll.html', context)
+
+
 @login_required(login_url='/accounts/login/')
-def pool_create_page(request):
+def poll_create_page(request):
     context = get_base_context(request)
     context['title'] = 'Создать опрос - SV'
     context['main_header'] = 'Создание опроса'
@@ -108,6 +121,53 @@ def login_page(request):
     if not request.user.is_authenticated:
         if request.method == "POST":
             # if user is entered something in the form
+            formm = User_Auth(request.POST)
+            if formm.is_valid():
+                # if everything is entered as it should be
+                user = authenticate(request, username=request.POST["username"],
+                                   password=request.POST["password"])
+                if user is not None:
+                    # if user exists login
+                    login(request, user)
+                    messages.add_message(
+                        request, messages.INFO, 'Вы успешно авторизовались.')
+                    return redirect(reverse('main-page'))
+                else:
+                    # if password or username is not valid
+                    context["error"] = True
+            else:
+                # if entered data is not valid
+                context["error"] = True
+            # setting displayed form
+            context["form"] = formm
+        else:
+            # setting new form
+            context["form"] = User_Auth()
+    return render(request, "accounts/login.html", context)
+
+
+@login_required(login_url='/accounts/login/')
+def user(request):
+    context = get_base_context(request)
+    context['main_header'] = 'Информация об аккаунте:'
+    context['username'] = request.user.username
+    context['user_mail'] = request.user.email
+    context['user_status'] = ''
+    return render(request, 'accounts/user.html', context)
+
+@login_required(login_url='/accounts/login/')
+def user_edit(request):
+    context = get_base_context(request)
+    return render(request, 'accounts/edit.html', context)
+
+def user_register(request):
+    context = get_base_context(request)
+    context['title'] = 'Регистрация - SV'
+    context['main_header'] = 'Регистрация на сайте'
+
+    if not request.user.is_authenticated:
+        if request.method == "POST":
+            # if user is entered something in the form
             formm = User_auth(request.POST)
             if formm.is_valid():
                 # if everything is entered as it should be
@@ -130,29 +190,13 @@ def login_page(request):
         else:
             # setting new form
             context["form"] = User_auth()
-    return render(request, "accounts/login.html", context)
-
-
-@login_required(login_url='/accounts/login/')
-def user(request):
-    context = get_base_context(request)
-    context['main_header'] = 'Информация об аккаунте:'
-    context['username'] = request.user.username
-    context['user_mail'] = request.user.email
-    context['user_status'] = ''
-    return render(request, 'accounts/user.html', context)
-
-@login_required(login_url='/accounts/login/')
-def user_edit(request):
-    context = get_base_context(request)
-    return render(request, '', context)
+    return render(request, 'accounts/register.html', context)
 
 
 def logout_page(request):
     logout(request)
     messages.add_message(request, messages.INFO, 'Вы вышли из аккаунта.')
     return redirect("main-page")
-    # return render(request, "logout.html", context)
 
 
 @login_required(login_url='/accounts/login/')
@@ -163,16 +207,16 @@ def add_report(request):
     user = User.objects.get()
 
     if request.method == 'POST':
-        form = ReporrtForm(request.POST)
+        form = Report_Form(request.POST)
         if form.is_valid():
-            record = ReModel(
+            record = Report_Model(
                 type=form.data['type'],
                 text=form.data['text'],
                 user=user
             )
             record.save()
-            context['addform'] = ReportForm()
+            context['addform'] = Report_Form()
     else:
-        context['addform'] = ReportForm()
+        context['addform'] = Report_Form()
     return render(request, 'polls/add_report.html', context)
 

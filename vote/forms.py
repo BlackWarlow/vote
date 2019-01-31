@@ -16,13 +16,13 @@ class Create_Poll(forms.Form):
 
 
 
-class User_auth(forms.Form):
+class User_Auth(forms.Form):
     username = forms.CharField(
         label="Имя пользователя", min_length=1, max_length=25, required=True)
     password = forms.CharField(label="Пароль", widget=forms.PasswordInput())
 
 
-class ReportForm(forms.Form):
+class Report_Form(forms.Form):
     type = forms.CharField(
         label='Тема жалобы',
         max_length=200,
@@ -42,3 +42,6 @@ class ReportForm(forms.Form):
             }
         )
     )
+
+
+class User_Register(forms.Form):
