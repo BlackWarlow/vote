@@ -3,38 +3,6 @@
 
 {% block content %}
 <style>
-	.poll_container {
-		width: 66%;
-		padding-top: 5px;
-		padding-right: 15px;
-		padding-bottom: 3px;
-		
-		margin-left: 50px;
-		margin-bottom: 10px;
-		
-		border-radius: 5px;
-		background-color: #BCD9F2;
-		color: black;
-	}
-	.poll_name {
-		padding: 5px;
-		padding-left: 25px;
-		
-		margin-bottom: 3px;
-		margin-left: 15px;
-		
-		border-radius: 5px;
-		background-color: #F0F8FF;
-	}
-	.variant_container {
-		padding-left: 10px;
-		
-		margin-right: 50px;
-		margin-bottom: 3px;
-		
-		border-radius: 5px;
-		background-color: #F0F8FF;
-	}
 	.progress-title{
 		font-size: 17px;
 		font-weight: 700;
@@ -49,19 +17,37 @@
 	}
 	.progress .progress-bar{
 		position: relative;
-		color: #577798;
-		background: #577798;
+		background: #143660;
+		position: relative;
+		animation: animate-positive 1s;
 	}
 	.progress .progress-value{
-		color: grey;
+		color: #7CA1CE;
 	}
-	</style>
+	@-webkit-keyframes animate-positive{
+		0%{ width: 0; }
+	}
+	@keyframes animate-positive{
+		0%{ width: 0; }
+	}
+</style>
 
+<script>
+	function declOfNum(number)  
+	{
+		titles = [' голос',' голоса', ' голосов'];
+		cases = [2, 0, 1, 1, 1, 2];  
+		return titles[ (number%100>4 && number%100<20)? 2 : cases[(number%10<5)?number%10:5] ];  
+	}
+	function std(el){
+		var count = parseInt(el.innerHTML);
+		el.innerHTML = count + declOfNum(count);
+	}
+</script>
 <body>
 	<h1>{{main_header}}</h1>
 	<hr>
 	
-	<ul>
 	{% for poll in polls%}
 		<div class="post cl_container">
 			<h2  href = "/">{{ poll.1.name }}</h2>
@@ -70,8 +56,8 @@
 					<big class = "progress-title">{{ variant.variant_name }}</big>
 					<br>
 					<div class = "progress">
-						<div class="progress-bar" style="width:{{ variant.votes }}%; background:#1a4966;">
-							<div class="progress-value"> <nobr> {{ variant.votes }} votes</nobr></div>
+						<div class="progress-bar" style="width:{{ variant.votes }}%;" id = "pr-b">
+							<div class="progress-value"> <nobr name="counter"> {{ variant.votes }}</nobr></div>
 						</div>
 					</div>
 					<br>
@@ -79,7 +65,22 @@
 
 		</div>
 	{% endfor %}
-	</ul>
-
+	
+	<script>
+		var arr = document.getElementsByName("counter");
+		for(var i = 0; i < arr.length; i++){
+			std(arr[i]);
+		}
+	</script>
 </body>
 {% endblock %}
+
+
+
+
+
+
+
+
+
+
