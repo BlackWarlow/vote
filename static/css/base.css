@@ -36,6 +36,7 @@ a {
 	vertical-align: middle;
 	text-align: center;
 	-webkit-appearance: button;
+	border:solid rgb(31,204,195);
 }
 .button:hover {
 	transition: 0.2s;
