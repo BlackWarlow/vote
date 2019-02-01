@@ -40,6 +40,7 @@ class Report_Form(forms.Form):
 class User_Email_Form(forms.Form):
     email = forms.EmailField(required=True)
 
+
 class User_Edit_Form(forms.Form):
     password = forms.CharField(
         label="Ваш пароль", widget=forms.PasswordInput(), required=True)
@@ -53,4 +54,4 @@ class User_Edit_Form(forms.Form):
     first_name = forms.CharField(
         label="Имя", min_length=1, max_length=25, required=False)
     last_name = forms.CharField(
-        label="Фамилия", min_length=1, max_length=40, required=False)
+        label = "Фамилия", min_length = 1, max_length = 40, required = False)
