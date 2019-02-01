@@ -67,7 +67,9 @@ def polls_page(request):
 
 def view_poll(request, id):
     context = get_base_context(request)
-    poll = Poll.objects.filter(id=id)
+    poll = Poll.objects.filter(id=id)[0]
+    context['title'] = poll.name
+    context['main_header'] = 'Просмотр опроса'
     lst = []
     lst.append(Poll_variant.objects.filter(belongs_to=poll))
     lst.append(poll)
@@ -152,15 +154,54 @@ def login_page(request):
 @login_required(login_url='/accounts/login/')
 def user(request):
     context = get_base_context(request)
+    context['title'] = 'Аккуант - SV'
     context['main_header'] = 'Информация об аккаунте:'
-    context['username'] = request.user.username
-    context['user_mail'] = request.user.email
-    context['user_status'] = ''
     return render(request, 'accounts/user.html', context)
+
 
 @login_required(login_url='/accounts/login/')
 def user_edit(request):
     context = get_base_context(request)
+    context['title'] = 'Редактирование аккаунта - SV'
+    context['main_header'] = 'Редактировать аккаунт'
+
+    if request.method == 'POST':
+        form = User_Edit_Form(request.POST)
+        user = request.user
+        if form.is_valid():
+
+            new_passwd = form.data['new_password']
+            new_username = form.data['username']
+            new_email = form.data['email']
+            new_first_name = form.data['first_name']
+            new_last_name = form.data['last_name']
+
+            if new_passwd:
+                if user.check_password(form.data['password']):
+                    user.set_password(new_passwd)
+
+            if new_username:
+                user.username = new_username
+
+            if new_email:
+                user.email = new_email
+
+            if new_first_name:
+                user.first_name = new_first_name
+
+            if new_last_name:
+                user.last_name = new_last_name
+
+            user.save()
+            messages.add_message(
+                request, messages.INFO, 'Изменения сохранены')
+            return redirect('/accounts/user/')
+        else:
+            context['errors'] = 'Проверьте правильность заполнения полей'
+        context['form'] = form
+    else:
+        context['form'] = User_Edit_Form()
+
     return render(request, 'accounts/edit.html', context)
 
 def user_register(request):
@@ -174,10 +215,10 @@ def user_register(request):
             email_form = User_Email_Form(request.POST)
             if form.is_valid() and email_form.is_valid():
                 new_user = form.save()
-                new_user.email = request.POST['email']
+                new_user.email = email_form.data['email']
                 new_user.save()
                 messages.add_message(
-                    request, messages.INFO, 'Вы зарегестрированы на сайте, чтобы продолжить войдите.')
+                    request, messages.INFO, 'Вы зарегестрированы на сайте, войдите, чтобы продолжить')
                 return redirect("/accounts/login/")
             else:
                 errs = form.errors
@@ -205,22 +246,22 @@ def logout_page(request):
 
 @login_required(login_url='/accounts/login/')
 def add_report(request):
-    context = {
-        'title': "Оставить жалобу - SV"
-    }
-    user = User.objects.get()
+    context = get_base_context(request)
+    context['title'] = 'Оставить жалобу - SV'
 
     if request.method == 'POST':
         form = Report_Form(request.POST)
         if form.is_valid():
+            poll = Poll.objects.filter(id=form.data['poll_id'])
             record = Report_Model(
-                theme=form.data['type'],
+                theme=form.data['theme'],
                 text=form.data['text'],
-                user=user
+                user=request.user,
+                poll_id=poll,
             )
             record.save()
-            context['addform'] = Report_Form()
+            context['form'] = Report_Form()
     else:
-        context['addform'] = Report_Form()
+        context['form'] = Report_Form()
     return render(request, 'polls/add_report.html', context)
 

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/accounts/edit.css' %}">
+<link rel="stylesheet" href="{% static 'css/form.css' %}">
+<body>
+	<h1>{{ main_header }}</h1>
+	<hr>
+	
+	<div class="main_text">
+		<form action="/accounts/edit/" method="POST">
+			{% csrf_token%}
+			<div class="cl_container">
+				{% if form.errors or errors %}
+					{{ form.errors }}<br>
+					{{ errors }}
+				{% endif %}
+				<center>
+					<div class="input_wrapper user_input">
+						<center>
+								{{ form.password.label }}:<br>
+								{{ form.password }}<br>
+								
+							<div class="thematic_wrap">
+								{{ form.new_password.label }}:<br>
+								{{ form.new_password }}<br>
+							</div>
+							
+							<div class="thematic_wrap">
+								{{ form.username.label }}:<br>
+								{{ form.username }}<br>
+								{{ form.email.label }}:<br>
+								{{ form.email }}<br>
+							</div>
+							
+							<div class="thematic_wrap">
+								{{ form.first_name.label }}:<br>
+								{{ form.first_name }}<br>
+								{{ form.last_name.label }}:<br>
+								{{ form.last_name }}
+							</div>
+						</center>
+					</div>
+					<a class="button inline warn" href="/accounts/user/">Отмена</a>
+					<input class="button inline" type="submit" value="Сохранить">
+				</center>
+			</div>
+		</form>
+	</div>
+</body>
+{% endblock %}

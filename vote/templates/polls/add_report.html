@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="cl_container">
+	<form action="" method="post">
+		{% csrf_token %}
+		<div class="input_wrapper inline">
+			<div class="user_input">
+				{{ form.poll_id.label }}: {{ form.poll_id }}
+			</div>
+			<div class="user_input">
+				{{ form.theme.label }}: {{ form.theme }}
+			</div>
+		</div>
+		<div class="main_text inline">
+			{{ form.text.label }}: {{ form.text }}
+		</div>
+		<input type="submit" class="button" value="Отправить" style="color: white;">
+	</form>
+</div>
+{% endblock %}

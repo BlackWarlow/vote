@@ -6,14 +6,10 @@ input {
 	border-radius: 3px;
 }
 
-#id_username, #id_password {
-	width: 150px;
-}
-
 .user_input{
 	margin-bottom: 10px;
 }
 
 .input_wrapper {
-	text-align: left;
+	text-align: center;
 }

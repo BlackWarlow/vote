@@ -28,10 +28,10 @@ urlpatterns = [
     path('polls/', views.polls_page),
     path('poll/<int:id>/', views.view_poll),
     path('polls/create/', views.poll_create_page),
+    path('polls/add_report/', views.add_report),
     path('accounts/login/', views.login_page),
     path('accounts/logout/', views.logout_page),
     path('accounts/user/', views.user),
     path('accounts/edit/', views.user_edit),
     path('accounts/register/', views.user_register),
-    path('add_report/', views.add_report),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

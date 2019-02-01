@@ -23,25 +23,34 @@ class User_Auth(forms.Form):
 
 
 class Report_Form(forms.Form):
+    poll_id = forms.IntegerField(
+        label='ID опроса',
+        min_value=1,
+    )
     theme = forms.CharField(
         label='Тема жалобы',
         max_length=200,
-        widget=forms.TextInput(
-            attrs={
-                'class': 'form-control'
-            }
-        )
     )
     text = forms.CharField(
         label='Жалоба',
         max_length=5000,
-        widget=forms.Textarea(
-            attrs={
-                'class': 'form-control',
-                'style': 'height:500px'
-            }
-        )
     )
+
 
 class User_Email_Form(forms.Form):
     email = forms.EmailField(required=True)
+
+class User_Edit_Form(forms.Form):
+    password = forms.CharField(
+        label="Ваш пароль", widget=forms.PasswordInput(), required=True)
+    new_password = forms.CharField(
+        label="Новый пароль", widget=forms.PasswordInput(), required=False)
+
+    username = forms.CharField(
+        label="Имя пользователя", min_length=1, max_length=25, required=False)
+    email = forms.EmailField(
+        label="Почта", min_length=1, max_length=25, required=False)
+    first_name = forms.CharField(
+        label="Имя", min_length=1, max_length=25, required=False)
+    last_name = forms.CharField(
+        label="Фамилия", min_length=1, max_length=40, required=False)

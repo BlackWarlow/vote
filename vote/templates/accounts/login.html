@@ -2,7 +2,8 @@
 {% load static %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/login.css' %}">
+<link rel="stylesheet" href="{% static 'css/accounts/login.css' %}">
+<link rel="stylesheet" href="{% static 'css/form.css' %}">
 <body>
 	<h1>{{ main_header }}</h1>
 	<hr>
@@ -26,7 +27,7 @@
 							{{ form.password }}
 						</div>
 					</div>
-					<input class="button" type="submit" value="Войти на сайт">
+					<input class="button" type="submit" value="Войти на сайт" style="color: white;">
 					</center>
 					Нет учётной записи? <a href="/accounts/register/" style="text-decoration: underline;">Зарегистрируйтесь!</a>
 				</div>
@@ -35,7 +36,7 @@
 		{% else %}
 			<div class="cl_container">
 				<center>
-				Вы уже авторизованы как <b>{{ user.username }}</b>, нажмите, чтобы выйти
+				Вы уже авторизованы как <b>{{ user.username }}</b>, нажмите, чтобы выйти:
 				<a style="display: table-cell;" href="{{ menu.5.link }}"><div class="button warn no_select">Выйти</div></a>
 				</center>
 			</div>

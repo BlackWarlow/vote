@@ -1,7 +1,9 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/form.css' %}">
     <h1>Регистрация пользователя</h1>
+	<hr>
     <div class="cl_container">
         <form action="." method="post">
 	        {% csrf_token %}
@@ -11,21 +13,21 @@
 	        {% endfor %}
 			
 			<center>
-            <label for="id_username">Логин:</label><br>
-	        {{ form.username }}<br>
-	        
-	        <label for="id_username">Почта:</label><br>
-	        {{ email_form.email }}<br>
-            
-            <label for="id_password1">Пароль:</label><br>
-	        {{ form.password1 }}<br>
-            
-            <label for="id_password2">Пароль ( снова ):</label><br>
-	        {{ form.password2 }}<br>
-            
+			<div class="user_input">
+				<label for="id_username">Логин:</label><br>
+				{{ form.username }}<br>
+				
+				<label for="id_username">Почта:</label><br>
+				{{ email_form.email }}<br>
+				<br>
+				<label for="id_password1">Пароль:</label><br>
+				{{ form.password1 }}<br>
+				
+				<label for="id_password2">Пароль ( снова ):</label><br>
+				{{ form.password2 }}<br>
+            </div>
             <input class="button no_select" type="submit" value="Зарегистрироваться">
 			</center>
-			
         </form>
     </div>
 {% endblock %}
