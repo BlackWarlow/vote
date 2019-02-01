@@ -28,19 +28,19 @@ a {
 .button {
 	cursor: pointer;
 	background-color: transparent;
+	color:white;
 	font-size: 16px;
 	padding: 10px;
-	border: 2px solid darkgrey;
 	border-radius: 5px;
 	display: table;
 	vertical-align: middle;
 	text-align: center;
 	-webkit-appearance: button;
-	border:solid rgb(31,204,195);
+	border: 1px solid rgb(31,204,195);
 }
 .button:hover {
 	transition: 0.2s;
-	background-color: darkgrey;
+	background-color:rgb(0,255,234);
 	color: black;
 }
 
