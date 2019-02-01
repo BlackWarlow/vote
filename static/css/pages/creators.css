@@ -19,7 +19,7 @@
 .about-us p{
 	color:#7C878F;
 	font-size:20px;
-	margin:0;
+	margin: 0px;
 }
 .about-us span{
 	color: rgba(255,255,255,0);
@@ -33,7 +33,7 @@
 	float:right;
 }
 .social-icons ul{
-	padding:0;
+	padding: 0px;
 	margin:2em 0 0;
 }
 .social-icons ul li{

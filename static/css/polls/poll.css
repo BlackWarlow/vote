@@ -1,0 +1,32 @@
+.progress-title{
+	font-size: 17px;
+	font-weight: 700;
+	color: white;
+	text-transform: uppercase;
+}
+.progress{
+	height: 19px;
+	color: #577798;
+	background: #303030;
+	position: relative;
+	border-radius: 2px;
+	padding: 2px;
+	margin-top: 2px;
+	margin-right: 5%;
+	margin-left: 5%;
+}
+.progress .progress-bar{
+	position: relative;
+	background: #143660;
+	position: relative;
+	animation: animate-positive 1s;
+}
+.progress .progress-value{
+	color: #7CA1CE;
+}
+@-webkit-keyframes animate-positive{
+	0%{ width: 0; }
+}
+@keyframes animate-positive{
+	0%{ width: 0; }
+}

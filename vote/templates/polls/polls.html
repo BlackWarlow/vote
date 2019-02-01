@@ -2,35 +2,6 @@
 {% load static %}
 
 {% block content %}
-<style>
-	.progress-title{
-		font-size: 17px;
-		font-weight: 700;
-		color: white;
-		text-transform: uppercase;
-	}
-	.progress{
-		height: 19px;
-		color: #577798;
-		background: #303030;
-		position: relative;
-	}
-	.progress .progress-bar{
-		position: relative;
-		background: #143660;
-		position: relative;
-		animation: animate-positive 1s;
-	}
-	.progress .progress-value{
-		color: #7CA1CE;
-	}
-	@-webkit-keyframes animate-positive{
-		0%{ width: 0; }
-	}
-	@keyframes animate-positive{
-		0%{ width: 0; }
-	}
-</style>
 <script>
 	function declOfNum(number)  
 	{
@@ -44,34 +15,42 @@
 	}
 </script>
 
+<style>
+	#wrapper {
+		text-transform: uppercase;
+		background-color: #577798;
+		border-radius: 10px;
+	}
+	.post {
+		border-bottom: 1px solid #1b2036;
+	}
+	.post:last-child {
+		border-bottom-left-radius: 10px;
+		border-bottom-right-radius: 10px;
+		border-bottom: none;
+	}
+	.post:first-child {
+		border-top-left-radius: 10px;
+		border-top-right-radius: 10px;
+	}
+	.post:hover {
+		background-color: #34689e;
+	}
+</style>
+
 <body>
 	<h1>{{main_header}}</h1>
 	<hr>
 	
-	{% for poll in polls%}
-		<div class="post cl_container">
-			<h2  href = "/">{{ poll.1.name }}</h2>
-
-				{% for variant in poll.0 %}
-					<big class = "progress-title">{{ variant.variant_name }}</big>
-					<br>
-					<div class = "progress">
-						<div class="progress-bar" style="width:{{ variant.votes }}%;" id = "pr-b">
-							<div class="progress-value"> <nobr name="counter"> {{ variant.votes }}</nobr></div>
-						</div>
-					</div>
-					<br>
-				{% endfor %}
-
+	<div id="wrapper">
+		{% for poll in polls%}
+		<div class="post">
+			<a href="/poll/{{ poll.1.id }}/">
+				<h4>"{{ poll.1.name }}"</h4>
+			</a>
 		</div>
-	{% endfor %}
-	
-	<script>
-		var arr = document.getElementsByName("counter");
-		for(var i = 0; i < arr.length; i++){
-			std(arr[i]);
-		}
-	</script>
+		{% endfor %}
+	</div>
 </body>
 {% endblock %}
 

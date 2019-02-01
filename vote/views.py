@@ -5,6 +5,8 @@ from vote.forms import *
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
+from django.db import IntegrityError
+
 from django.contrib.auth.models import User, AnonymousUser
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.decorators import login_required
@@ -54,8 +56,26 @@ def polls_page(request):
     context['main_header'] = 'Список опросов на сайте'
     all_polls = Poll.objects.all()
     lst = []
-    max_polls = min(15, len(all_polls))
+    max_polls = min(30, len(all_polls))
     for i in range(0, max_polls):
+        lst.append(
+            [Poll_variant.objects.filter(
+                belongs_to=all_polls[i]),
+             all_polls[i]]
+        )
+    context['polls'] = lst
+    return render(request, 'polls/polls.html', context)
+
+
+@login_required(login_url='/accounts/login/')
+def my_polls(request):
+    context = get_base_context(request)
+    context['title'] = 'Мои опросы - SV'
+    context['main_header'] = 'Список моих опросов'
+
+    lst = []
+    all_polls = Poll.objects.filter(author=request.user)
+    for i in range(0, len(all_polls)):
         lst.append(
             [Poll_variant.objects.filter(
                 belongs_to=all_polls[i]),
@@ -89,7 +109,7 @@ def poll_create_page(request):
 
         if form.is_valid():
             # Poll name
-            p_name = form.data['name']
+            p_name = form.cleaned_data['name']
 
             # Poll object
             pollobj = Poll(date=context['current_date'],
@@ -100,7 +120,7 @@ def poll_create_page(request):
             # Writing poll objects
             for i in range(1, 11):
                 st = 'variant_' + str(i)
-                cur_name = form.data[st]
+                cur_name = form.cleaned_data[st]
                 if cur_name == '':
                     done = True
                 else:
@@ -129,8 +149,8 @@ def login_page(request):
             formm = User_Auth(request.POST)
             if formm.is_valid():
                 # if everything is entered as it should be
-                user = authenticate(request, username=request.POST["username"],
-                                   password=request.POST["password"])
+                user = authenticate(request, username=User_Auth.cleaned_data["username"],
+                                   password=User_Auth.cleaned_data["password"])
                 if user is not None:
                     # if user exists login
                     login(request, user)
@@ -170,14 +190,14 @@ def user_edit(request):
         user = request.user
         if form.is_valid():
 
-            new_passwd = form.data['new_password']
-            new_username = form.data['username']
-            new_email = form.data['email']
-            new_first_name = form.data['first_name']
-            new_last_name = form.data['last_name']
+            new_passwd = form.cleaned_data['new_password']
+            new_username = form.cleaned_data['username']
+            new_email = form.cleaned_data['email']
+            new_first_name = form.cleaned_data['first_name']
+            new_last_name = form.cleaned_data['last_name']
 
             if new_passwd:
-                if user.check_password(form.data['password']):
+                if user.check_password(form.cleaned_data['password']):
                     user.set_password(new_passwd)
 
             if new_username:
@@ -192,12 +212,16 @@ def user_edit(request):
             if new_last_name:
                 user.last_name = new_last_name
 
-            user.save()
-            messages.add_message(
-                request, messages.INFO, 'Изменения сохранены')
-            return redirect('/accounts/user/')
+            try:
+                user.save()
+            except IntegrityError:
+                context['errors'] = 'Пользователь с таким именем уже существует!'
+            else:
+                messages.add_message(
+                    request, messages.INFO, 'Изменения сохранены')
+                return redirect('/accounts/user/')
         else:
-            context['errors'] = 'Проверьте правильность заполнения полей'
+            context['errors'] = 'Проверьте правильность заполнения полей!'
         context['form'] = form
     else:
         context['form'] = User_Edit_Form()
@@ -215,7 +239,7 @@ def user_register(request):
             email_form = User_Email_Form(request.POST)
             if form.is_valid() and email_form.is_valid():
                 new_user = form.save()
-                new_user.email = email_form.data['email']
+                new_user.email = email_form.cleaned_data['email']
                 new_user.save()
                 messages.add_message(
                     request, messages.INFO, 'Вы зарегестрированы на сайте, войдите, чтобы продолжить')
@@ -245,23 +269,25 @@ def logout_page(request):
 
 
 @login_required(login_url='/accounts/login/')
-def add_report(request):
+def add_report(request, id=None):
     context = get_base_context(request)
     context['title'] = 'Оставить жалобу - SV'
 
     if request.method == 'POST':
         form = Report_Form(request.POST)
         if form.is_valid():
-            poll = Poll.objects.filter(id=form.data['poll_id'])
+            poll = Poll.objects.filter(id=form.cleaned_data['poll_id'])
             record = Report_Model(
-                theme=form.data['theme'],
-                text=form.data['text'],
+                theme=form.cleaned_data['theme'],
+                text=form.cleaned_data['text'],
                 user=request.user,
                 poll_id=poll,
             )
             record.save()
-            context['form'] = Report_Form()
+            messages.add_message(
+                request, messages.INFO, 'Ваша жалоба отправлена администраторам')
     else:
         context['form'] = Report_Form()
+        context['form'].poll_id = id
     return render(request, 'polls/add_report.html', context)
 

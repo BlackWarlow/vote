@@ -12,9 +12,8 @@
 		<form action="/accounts/edit/" method="POST">
 			{% csrf_token%}
 			<div class="cl_container">
-				{% if form.errors or errors %}
-					{{ form.errors }}<br>
-					{{ errors }}
+				{% if errors %}
+					<div class="msg_warning">{{ errors }}</div><br>
 				{% endif %}
 				<center>
 					<div class="input_wrapper user_input">
