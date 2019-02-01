@@ -7,6 +7,7 @@ class Poll(models.Model):
     date = models.DateField(default="2000-01-01")
     time = models.TimeField(default="00:00:00")
     name = models.CharField(max_length=100)
+    one_answer = models.BooleanField(default=True)
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -14,9 +15,13 @@ class Poll(models.Model):
 
 class Poll_variant(models.Model):
     variant_name = models.CharField(max_length=100)
-    votes = models.IntegerField()
     belongs_to = models.ForeignKey(
         to=Poll, default='none', on_delete=models.CASCADE)
+
+class Vote(models.Model):
+    belongs_to = models.ForeignKey(
+        to=Poll_variant, default='none', on_delete=models.CASCADE)
+    author = models.ForeignKey(to=User, on_delete=models.CASCADE)
 
 class Author(models.Model):
     name = models.CharField(max_length=100)

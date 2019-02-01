@@ -17,12 +17,17 @@
 
 <style>
 	#wrapper {
-		text-transform: uppercase;
 		background-color: #577798;
 		border-radius: 10px;
 	}
 	.post {
 		border-bottom: 1px solid #1b2036;
+	}
+	.post a h4 {
+		text-transform: uppercase;
+	}
+	.post a span {
+		text-transform: none;
 	}
 	.post:last-child {
 		border-bottom-left-radius: 10px;
@@ -36,6 +41,9 @@
 	.post:hover {
 		background-color: #34689e;
 	}
+	b {
+		color: white;
+	}
 </style>
 
 <body>
@@ -46,6 +54,7 @@
 		<div class="post">
 			<a href="/poll/{{ poll.1.id }}/">
 				<h4>"{{ poll.1.name }}"</h4>
+				<span>Автор: <b>@{{ poll.1.author }}</b></span>
 			</a>
 		</div>
 		{% endfor %}

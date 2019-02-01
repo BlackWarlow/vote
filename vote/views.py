@@ -2,7 +2,7 @@ import datetime
 from vote.models import *
 from vote.forms import *
 
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
 
 from django.db import IntegrityError
@@ -92,13 +92,26 @@ def my_polls(request):
 
 def view_poll(request, id):
     context = get_base_context(request)
-    poll = Poll.objects.filter(id=id)[0]
+    try:
+        poll = Poll.objects.filter(id=id)[0]
+    except IndexError:
+        raise Http404
     context['title'] = poll.name
     context['main_header'] = 'Просмотр опроса'
+
+    all_variants = Poll_variant.objects.filter(belongs_to=poll)
+
     lst = []
-    lst.append(Poll_variant.objects.filter(belongs_to=poll))
+    lst.append(all_variants)
     lst.append(poll)
-    context['poll'] = lst
+    lst.append([i for i in range(0, len(all_variants))])
+    context['polls'] = lst
+
+    if request.method == 'POST':
+        for i in range(0, len(all_variants)):
+            st = 'variant_' + str(i)
+            if request.POST[st]:
+                print('qiw')
     return render(request, 'polls/poll.html', context)
 
 
@@ -129,7 +142,7 @@ def poll_create_page(request):
                 if cur_name == '':
                     done = True
                 else:
-                    Poll_variant(variant_name=cur_name, votes=0,
+                    Poll_variant(variant_name=cur_name,
                                  belongs_to=pollobj).save()
             context['form'] = form
             messages.add_message(
@@ -154,8 +167,8 @@ def login_page(request):
             formm = User_Auth(request.POST)
             if formm.is_valid():
                 # if everything is entered as it should be
-                user = authenticate(request, username=User_Auth.cleaned_data["username"],
-                                   password=User_Auth.cleaned_data["password"])
+                user = authenticate(request, username=request.POST["username"],
+                                   password=request.POST["password"])
                 if user is not None:
                     # if user exists login
                     login(request, user)
@@ -274,7 +287,7 @@ def logout_page(request):
 
 
 @login_required(login_url='/accounts/login/')
-def add_report(request, id=None):
+def add_report(request, id=1):
     context = get_base_context(request)
     context['title'] = 'Оставить жалобу - SV'
 

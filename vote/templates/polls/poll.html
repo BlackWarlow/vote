@@ -2,10 +2,33 @@
 {% load static %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/form.css' %}">
+<link rel="stylesheet" href="{% static 'css/polls/poll.css' %}">
 <body>
 	<h1>{{main_header}}</h1>
 	<hr>
-	<div class="cl_container">
-	</div>
+		<div class="cl_container">
+		<form action="." method="POST">
+			{% csrf_token %}
+			<h2>{{ polls.1.name }}</h2>
+			
+			{% if polls.1.one_answer %}
+				<ul>
+					{% for poll in polls %}
+						{{ poll.0.variant_name }}<br>
+						<input type="radio" name="poll" value="variant_{{ poll.2 }}">
+					{% endfor %}
+				</ul>
+			{% else %}
+				<ul>
+					{% for variant in poll.0 %}
+					{% endfor %}
+				</ul>
+			{% endif %}
+			{% if voted %}
+				<input class="button" type="submit" value="Пролосовать" style="margin-top: 5px;">
+			{% endif %}
+		</form>
+		</div>
 </body>
 {% endblock %}
