@@ -100,18 +100,34 @@ def view_poll(request, id):
     context['main_header'] = 'Просмотр опроса'
 
     all_variants = Poll_variant.objects.filter(belongs_to=poll)
+    all_votes = 0
+    voted = False
 
-    lst = []
-    lst.append(all_variants)
-    lst.append(poll)
-    lst.append([i for i in range(0, len(all_variants))])
-    context['polls'] = lst
+    for i in range(0, len(all_variants)):
+        votes = Vote.objects.filter(belongs_to=all_variants[i])
+        all_votes += len(votes)
+        if len(Vote.objects.filter(author=request.user, belongs_to=all_variants[i])):
+            voted = True
+
+    lst=[]
+    for i in range(len(all_variants)):
+        votes = len(Vote.objects.filter(belongs_to=all_variants[i]))
+        if all_votes == 0:
+            all_votes = 1
+        lst.append([all_variants[i], str(
+            round(votes / all_votes * 100, 1)) + '%', i])
+
+    context['poll_variants']=lst
+    context['poll'] = poll
+    context['voted'] = voted
+
 
     if request.method == 'POST':
-        for i in range(0, len(all_variants)):
-            st = 'variant_' + str(i)
-            if request.POST[st]:
-                print('qiw')
+        variant = request.POST.get('poll')[-1:]
+        print(variant)
+        vote = Vote(belongs_to=all_variants[int(
+            variant)], author=request.user)
+        vote.save()
     return render(request, 'polls/poll.html', context)
 
 

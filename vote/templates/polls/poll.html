@@ -10,13 +10,15 @@
 		<div class="cl_container">
 		<form action="." method="POST">
 			{% csrf_token %}
-			<h2>{{ polls.1.name }}</h2>
+			<h2>{{ poll.name }}</h2>
 			
-			{% if polls.1.one_answer %}
+			{% if poll.one_answer %}
 				<ul>
-					{% for poll in polls %}
-						{{ poll.0.variant_name }}<br>
-						<input type="radio" name="poll" value="variant_{{ poll.2 }}">
+					{% for poll_variant in poll_variants %}
+						<input type="radio" name="poll" value="variant_{{ poll_variant.2 }}"> {{ poll_variant.0.variant_name }}<br>
+						<div class="pb_wrapper">
+							<div class="pb"><nobr>{{ poll_variant.1 }}</nobr></div>
+						</div>
 					{% endfor %}
 				</ul>
 			{% else %}
@@ -25,7 +27,7 @@
 					{% endfor %}
 				</ul>
 			{% endif %}
-			{% if voted %}
+			{% if not voted %}
 				<input class="button" type="submit" value="Пролосовать" style="margin-top: 5px;">
 			{% endif %}
 		</form>
