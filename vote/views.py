@@ -1,9 +1,11 @@
 import datetime
+import hashlib
+
 from vote.models import *
 from vote.forms import *
 
 from django.http import HttpResponse, Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from django.db import IntegrityError
 
@@ -22,13 +24,14 @@ def get_base_context(request):
             {'link': '/polls/create/', 'text': 'Создать опрос'},
             {'link': '/polls/', 'text': 'Опросы сайта'},
             {'link': '/accounts/user/', 'text': 'Аккаунт'},
-            {'link': '/my_polls/', 'text': 'Мои опросы'},
+            {'link': '/polls/my_polls/', 'text': 'Мои опросы'},
             {'link': '/accounts/logout/', 'text': 'Выйти'},
             {'link': '/accounts/login/', 'text': 'Войти'},
             {'link': '/accounts/edit/', 'text': 'Редактировать'},
             {'link': '/creators/', 'text': 'О нас'},
             {'link': '/contacts/', 'text': 'Контакты'},
             {'link': '/donate/', 'text': 'Помощь'},
+            {'link': '/admin/', 'text': 'Модерация'},
         ],
         'user': request.user,
         'current_date': datetime.datetime.now().date().__str__(),
@@ -40,6 +43,7 @@ def index_page(request):
     context = get_base_context(request)
     context['title'] = 'Главная страница - SV'
     context['main_header'] = 'Simple votings'
+    context['blogs'] = list(reversed(Blog_Model.objects.all()))
     return render(request, 'index.html', context)
 
 def creators_page(request):
@@ -55,20 +59,23 @@ def contacts_page(request):
     context['main_header'] = 'Simple votings - Контакты'
     return render(request, 'contacts.html',context)
 
+
 def polls_page(request):
     context = get_base_context(request)
     context['title'] = 'Список опросов - SV'
     context['main_header'] = 'Список опросов на сайте'
     all_polls = Poll.objects.all()
+    max_polls = min(20, len(all_polls))
+
     lst = []
-    max_polls = min(30, len(all_polls))
     for i in range(0, max_polls):
         lst.append(
-            [Poll_variant.objects.filter(
-                belongs_to=all_polls[i]),
-             all_polls[i]]
+            [
+                Poll_variant.objects.filter(belongs_to=all_polls[i]),
+                all_polls[i]
+            ]
         )
-    context['polls'] = lst
+    context['polls'] = list(reversed(lst))
     return render(request, 'polls/polls.html', context)
 
 
@@ -77,57 +84,64 @@ def my_polls(request):
     context = get_base_context(request)
     context['title'] = 'Мои опросы - SV'
     context['main_header'] = 'Список моих опросов'
+    all_polls = Poll.objects.filter(author=request.user)
 
     lst = []
-    all_polls = Poll.objects.filter(author=request.user)
     for i in range(0, len(all_polls)):
         lst.append(
-            [Poll_variant.objects.filter(
-                belongs_to=all_polls[i]),
-             all_polls[i]]
+            [
+                Poll_variant.objects.filter(belongs_to=all_polls[i]),
+                all_polls[i]
+            ]
         )
-    context['polls'] = lst
+    context['polls'] = list(reversed(lst))
     return render(request, 'polls/polls.html', context)
 
 
-def view_poll(request, id):
+def view_poll(request, hash_id):
     context = get_base_context(request)
-    try:
-        poll = Poll.objects.filter(id=id)[0]
-    except IndexError:
-        raise Http404
+    poll = get_object_or_404(Poll, hash_id=hash_id)
     context['title'] = poll.name
     context['main_header'] = 'Просмотр опроса'
+    context['poll_hash'] = hash_id
 
     all_variants = Poll_variant.objects.filter(belongs_to=poll)
     all_votes = 0
     voted = False
 
-    for i in range(0, len(all_variants)):
-        votes = Vote.objects.filter(belongs_to=all_variants[i])
-        all_votes += len(votes)
+    # Checking if already voted and getting all votes
+    for i in range(len(all_variants)):
+        all_votes += len(Vote.objects.filter(belongs_to=all_variants[i]))
         if len(Vote.objects.filter(author=request.user, belongs_to=all_variants[i])):
             voted = True
 
-    lst=[]
+    # Voting for variants
+    if request.method == 'POST' and not voted:
+        if poll.one_answer:
+            variant = request.POST.get('poll')[-1:]
+            vote = Vote(belongs_to=all_variants[int(
+                variant)], author=request.user)
+            vote.save()
+        else:
+            print(request.POST.get('poll'))
+        voted = True
+
+    # Getting and reworking data
+    lst = []
     for i in range(len(all_variants)):
         votes = len(Vote.objects.filter(belongs_to=all_variants[i]))
+
         if all_votes == 0:
             all_votes = 1
-        lst.append([all_variants[i], str(
-            round(votes / all_votes * 100, 1)) + '%', i])
 
-    context['poll_variants']=lst
+        vote = votes / all_votes * 100
+        tmp_lst = [all_variants[i], str(round(vote, 1)) + '%', i, round(vote, 0)]
+        lst.append(tmp_lst)
+
+
+    context['poll_variants'] = lst
     context['poll'] = poll
     context['voted'] = voted
-
-
-    if request.method == 'POST':
-        variant = request.POST.get('poll')[-1:]
-        print(variant)
-        vote = Vote(belongs_to=all_variants[int(
-            variant)], author=request.user)
-        vote.save()
     return render(request, 'polls/poll.html', context)
 
 
@@ -144,26 +158,40 @@ def poll_create_page(request):
         if form.is_valid():
             # Poll name
             p_name = form.cleaned_data['name']
+            one_var = form.cleaned_data['one_variant']
+            open_date = form.cleaned_data['date']
 
             # Poll object
-            pollobj = Poll(date=context['current_date'],
-                           name=p_name, author=request.user)
+            pollobj = Poll(
+                one_answer=one_var,
+                date=context['current_date'],
+                name=p_name,
+                author=request.user,
+                open_date=open_date
+            )
             pollobj.save()
-            poll_id = pollobj.id
+            id_str = str(pollobj.id)
+            pollobj.hash_id = hashlib.shake_128(
+                bytes(id_str, 'utf-8')).hexdigest(5)
+            pollobj.save()
 
-            # Writing poll objects
+            # Writing poll variant objects
             for i in range(1, 11):
-                st = 'variant_' + str(i)
-                cur_name = form.cleaned_data[st]
+                st='variant_' + str(i)
+                cur_name=form.cleaned_data[st]
                 if cur_name == '':
-                    done = True
+                    done=True
                 else:
-                    Poll_variant(variant_name=cur_name,
-                                 belongs_to=pollobj).save()
-            context['form'] = form
+                    Poll_variant(
+                        variant_name=cur_name,
+                        belongs_to=pollobj).save()
+            context['form']=form
             messages.add_message(
-                request, messages.INFO, 'Опрос добавлен.')
-            return redirect('/poll/' + str(poll_id) + '/')
+                request,
+                messages.INFO,
+                'Опрос добавлен.'
+            )
+            return redirect('/poll/' + str(pollobj.hash_id) + '/')
         else:
             context['form'] = form
     else:
@@ -206,10 +234,14 @@ def login_page(request):
 
 
 @login_required(login_url='/accounts/login/')
-def user(request):
+def user(request, user_id=None):
     context = get_base_context(request)
     context['title'] = 'Аккуант - SV'
     context['main_header'] = 'Информация об аккаунте:'
+    context['guest'] = False
+    if user_id is not None:
+        context['guest'] = True
+        context['user'] = get_object_or_404(User, id=user_id)
     return render(request, 'accounts/user.html', context)
 
 
@@ -303,25 +335,33 @@ def logout_page(request):
 
 
 @login_required(login_url='/accounts/login/')
-def add_report(request, id=1):
+def add_report(request, hash_id):
     context = get_base_context(request)
     context['title'] = 'Оставить жалобу - SV'
 
     if request.method == 'POST':
         form = Report_Form(request.POST)
         if form.is_valid():
-            poll = Poll.objects.filter(id=form.cleaned_data['poll_id'])
+            poll = Poll.objects.filter(
+                hash_id=form.cleaned_data['poll_hash_id'])[0]
             record = Report_Model(
                 theme=form.cleaned_data['theme'],
                 text=form.cleaned_data['text'],
                 user=request.user,
-                poll_id=poll,
+                poll=poll,
             )
             record.save()
             messages.add_message(
                 request, messages.INFO, 'Ваша жалоба отправлена администраторам')
+            return redirect('/poll/' + hash_id + '/')
     else:
-        context['form'] = Report_Form()
-        context['form'].poll_id = id
-    return render(request, 'polls/add_report.html', context)
+        context['form'] = Report_Form(initial={'poll_hash_id': hash_id})
+    return render(request, 'reports/add_report.html', context)
 
+@login_required(login_url='/accounts/login/')
+def my_reports(request):
+    context = get_base_context(request)
+    context['title'] = 'Мои жалобы - SV'
+    context['reports'] = list(
+        reversed(Report_Model.objects.filter(author=request.user)))
+    return render(request, 'reports/my_reports.html', context)

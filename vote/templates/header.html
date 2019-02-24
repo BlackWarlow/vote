@@ -25,7 +25,9 @@
             {% else %}
                 <li><a href="{{ menu.6.link }}">{{ menu.6.text }}</a></li>
             {% endif %}
-			
+			{% if user.is_staff %}
+				<li><a href="{{ menu.11.link }}"><i class="fas fa-edit"></i> {{menu.11.text}} </a></li>
+			{% endif %}
 		</ul>
 	</nav>
 </div>

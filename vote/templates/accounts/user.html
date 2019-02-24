@@ -5,19 +5,35 @@
 <link rel="stylesheet" href="{% static 'css/accounts/user.css' %}">
 
 <body>
-	<h1>{{ main_header }}</h1>
+	<h1>{{ main_header }}</h1> 
 	<div class="info_wrapper">
-		<center><div><img title="Ы" height="100" width="100" src="{% static 'def_user.png' %}" alt="Аватарка"></div></center>
-		<div><h3><i class="fa fa-circle fa-xs"></i> Ник на сайте: <span>@{{ user.username }}</span></h3></div>
-		<div><h3><i class="fa fa-circle fa-xs"></i> Почта: <span>{{ user.email }}</span></h3></div>
-		<div><h3><i class="fa fa-circle fa-xs"></i> Имя: <span>{{ user.first_name }}</span></h3></div>
-		<div><h3><i class="fa fa-circle fa-xs"></i> Фамилия: <span>{{ user.last_name }}</span></h3></div>
+		{% if user.is_superuser %}
+			<center><div><img title="ЫЫЫЫЫ" height="100" width="100" src="{% static 'admin_user.png' %}"></div></center>
+			<div><h3><i class="fa fa-circle fa-xs"></i> Ник на сайте: <span style="color:#db2d2d" title="Роль: Админ">@{{ user.username }}</span></h3></div>
+		{% elif user.is_staff %}
+			<center><div><img title="ыыыыы" height="100" width="100" src="{% static 'mod_user.png' %}"></div></center>
+			<div><h3><i class="fa fa-circle fa-xs"></i> Ник на сайте: <span style="color:#eac526" title="Роль: Модератор">@{{ user.username }}</span></h3></div>
+		{% else %}
+			<center><div><img title="ъъъъъ" height="100" width="100" src="{% static 'def_user.png' %}"></div></center>
+			<div><h3><i class="fa fa-circle fa-xs"></i> Ник на сайте: <span style="color:#5029ed" title="Роль: Пользователь">@{{ user.username }}</span></h3></div>
+		{% endif %}
+		{% if not guest %}
+			<div><h3><i class="fa fa-circle fa-xs"></i> Почта: <span>{{ user.email }}</span></h3></div>
+			<div><h3><i class="fa fa-circle fa-xs"></i> Имя: <span>{{ user.first_name }}</span></h3></div>
+			<div><h3><i class="fa fa-circle fa-xs"></i> Фамилия: <span>{{ user.last_name }}</span></h3></div>
+		{% endif %}
 	</div>
 	
-	<center><div class="menu_wrapper">
-		<a class="inline" href="{{ menu.7.link }}"><div class="button alter_link no_select">{{ menu.7.text }}</div></a>
-		<a class="inline" href="{{ menu.5.link }}"><div class="button alter_link warn no_select">{{ menu.5.text }}</div></a>
-	</div></center>
+	{% if guest %}
+		<center><div class="menu_wrapper">
+			<a class="inline" href="{{ menu.3.link }}"><div class="button alter_link no_select">Мой аккаунт</div></a>
+		</div></center>
+	{% else %}
+		<center><div class="menu_wrapper">
+			<a class="inline" href="{{ menu.7.link }}"><div class="button alter_link no_select">{{ menu.7.text }}</div></a>
+			<a class="inline" href="{{ menu.5.link }}"><div class="button alter_link warn no_select">{{ menu.5.text }}</div></a>
+		</div></center>
+	{% endif %}
 
 </body>
 {% endblock %}

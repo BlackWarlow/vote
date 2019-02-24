@@ -2,18 +2,6 @@
 {% load static %}
 
 {% block content %}
-<script>
-	function declOfNum(number)  
-	{
-		titles = [' голос',' голоса', ' голосов'];
-		cases = [2, 0, 1, 1, 1, 2];  
-		return titles[ (number%100>4 && number%100<20)? 2 : cases[(number%10<5)?number%10:5] ];  
-	}
-	function std(el){
-		var count = parseInt(el.innerHTML);
-		el.innerHTML = count + declOfNum(count);
-	}
-</script>
 
 <style>
 	#wrapper {
@@ -44,21 +32,30 @@
 	b {
 		color: white;
 	}
+	.poll_date{
+		float: right;
+		white-space: nowrap;
+	}
 </style>
 
 <body>
 	<h1>{{main_header}}</h1>
 	<hr>
-	<div id="wrapper">
-		{% for poll in polls%}
-		<div class="post">
-			<a href="/poll/{{ poll.1.id }}/">
-				<h4>"{{ poll.1.name }}"</h4>
-				<span>Автор: <b>@{{ poll.1.author }}</b></span>
-			</a>
+	{% if polls %}
+		<div id="wrapper">
+			{% for poll in polls %}
+			<div class="post">
+				<a href="/poll/{{ poll.1.hash_id }}/">
+					<h4>"{{ poll.1.name }}"</h4>
+					<span>Автор: <b>@{{ poll.1.author }}</b></span>
+					<span class="poll_date"><i>{{ poll.1.date }}</i></span>
+				</a>
+			</div>
+			{% endfor %}
 		</div>
-		{% endfor %}
-	</div>
+	{% else %}
+		<p style="color:gray;"><i>Пока что тут пустовато...</i> Бегите быстрее создавать опросы, чтобы увидеть их тут.</p>
+	{% endif %}
 </body>
 {% endblock %}
 

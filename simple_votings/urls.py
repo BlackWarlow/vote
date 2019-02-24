@@ -23,18 +23,25 @@ from vote import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
     path('', views.index_page, name='main-page'),
     path('creators/', views.creators_page),
+
     path('polls/', views.polls_page),
-    path('poll/<int:id>/', views.view_poll),
+    path('polls/my_polls/', views.my_polls),
     path('polls/create/', views.poll_create_page),
-    path('my_polls/', views.my_polls),
+    path('poll/<str:hash_id>/', views.view_poll),
+    # TODO path('poll/edit/<str:hash_id>/', views.edit_poll),
+
     path('polls/add_report/', views.add_report),
-    path('polls/add_report/<int:id>/', views.add_report),
+    path('polls/add_report/<str:hash_id>/', views.add_report),
+    path('polls/my_reports/', views.my_reports),
+
     path('accounts/login/', views.login_page),
     path('accounts/logout/', views.logout_page),
     path('accounts/user/', views.user),
+    path('accounts/user/<int:user_id>/', views.user),
     path('accounts/edit/', views.user_edit),
     path('accounts/register/', views.user_register),
-    path('contacts/', views.contacts_page)
+    path('contacts/', views.contacts_page),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

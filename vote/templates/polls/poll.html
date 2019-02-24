@@ -4,6 +4,26 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/form.css' %}">
 <link rel="stylesheet" href="{% static 'css/polls/poll.css' %}">
+
+<style>
+	.pb_wrapper{
+		margin-top: 4px;
+		margin-bottom: 4px;
+		margin-right: 10%;
+		margin-left: 15px;
+	}
+	.pb{
+		border-radius: 5px;
+		background-color: #577798;
+	}
+	.report{
+		margin-right: 5px;
+		margin-left: auto;
+		font-size: 12px;
+		padding: 4px;	
+	}
+</style>
+
 <body>
 	<h1>{{main_header}}</h1>
 	<hr>
@@ -15,21 +35,39 @@
 			{% if poll.one_answer %}
 				<ul>
 					{% for poll_variant in poll_variants %}
-						<input type="radio" name="poll" value="variant_{{ poll_variant.2 }}"> {{ poll_variant.0.variant_name }}<br>
+					<li>
+						{% if not voted %}
+							<input type="radio" name="poll" value="variant_{{ poll_variant.2 }}"> {{ poll_variant.0.variant_name }}<br>
+						{% else %}
+							<span>{{ poll_variant.0.variant_name }}</span>
+						{% endif %}
 						<div class="pb_wrapper">
-							<div class="pb"><nobr>{{ poll_variant.1 }}</nobr></div>
+							<div class="pb" style="width: {{ poll_variant.1 }};"><center><nobr>{{ poll_variant.1 }}</nobr></center></div>
 						</div>
+					</li>
 					{% endfor %}
 				</ul>
 			{% else %}
 				<ul>
-					{% for variant in poll.0 %}
+					{% for poll_variant in poll_variants %}
+					<li>
+						{% if not voted %}
+							<input type="checkbox" name="variant_{{ poll_variant.2 }}"> {{ poll_variant.0.variant_name }}<br>
+						{% else %}
+							<span>{{ poll_variant.0.variant_name }}</span>
+						{% endif %}
+						<div class="pb_wrapper">
+							<div class="pb" style="width: {{ poll_variant.1 }};"><center><nobr>{{ poll_variant.1 }}</nobr></center></div>
+						</div>
+					</li>
 					{% endfor %}
 				</ul>
 			{% endif %}
+			
 			{% if not voted %}
 				<input class="button" type="submit" value="Пролосовать" style="margin-top: 5px;">
 			{% endif %}
+			<a class="button warn report" href="http://localhost:8000/polls/add_report/{{ poll_hash }}/">Пожаловаться на опрос</a>
 		</form>
 		</div>
 </body>
