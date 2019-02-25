@@ -46,7 +46,12 @@
 			{% for poll in polls %}
 			<div class="post">
 				<a href="/poll/{{ poll.1.hash_id }}/">
-					<h4>"{{ poll.1.name }}"</h4>
+					{% if poll.1.open_for_vote %}
+						<h4>"{{ poll.1.name }}"</h4>
+					{% else %}
+						<h4 style="color: #f5b0b0 !important;" title="(Опрос закрыт)">"{{ poll.1.name }}"</h4>
+					{% endif %}
+						
 					<span>Автор: <b>@{{ poll.1.author }}</b></span>
 					<span class="poll_date"><i>{{ poll.1.date }}</i></span>
 				</a>
@@ -54,7 +59,7 @@
 			{% endfor %}
 		</div>
 	{% else %}
-		<p style="color:gray;"><i>Пока что тут пустовато...</i> Бегите быстрее создавать опросы, чтобы увидеть их тут.</p>
+		<p style="color:gray;"><i>Пока что тут пустовато... </i>Бегите быстрее создавать опросы, чтобы увидеть их тут.</p>
 	{% endif %}
 </body>
 {% endblock %}

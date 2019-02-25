@@ -101,6 +101,13 @@ def my_polls(request):
 def view_poll(request, hash_id):
     context = get_base_context(request)
     poll = get_object_or_404(Poll, hash_id=hash_id)
+
+    if poll.open_for_vote:
+        if datetime.datetime.now().date() > poll.open_date:
+            if datetime.datetime.now().time() > poll.time:
+                poll.open_for_vote = False
+                poll.save()
+
     context['title'] = poll.name
     context['main_header'] = 'Просмотр опроса'
     context['poll_hash'] = hash_id
@@ -116,15 +123,30 @@ def view_poll(request, hash_id):
             voted = True
 
     # Voting for variants
-    if request.method == 'POST' and not voted:
+    if request.method == 'POST' and not voted and poll.open_for_vote:
         if poll.one_answer:
             variant = request.POST.get('poll')[-1:]
-            vote = Vote(belongs_to=all_variants[int(
-                variant)], author=request.user)
+            vote = Vote(
+                belongs_to=all_variants[int(variant)],
+                author=request.user
+            )
             vote.save()
         else:
-            print(request.POST.get('poll'))
+            lst = []
+            for i in range(0, 10):
+                variant = request.POST.get('variant_' + str(i))
+                if variant == 'on':
+                    vote = Vote(
+                        belongs_to=all_variants[i],
+                        author=request.user
+                    )
+                    vote.save()
         voted = True
+
+    # Renewing votes
+    all_votes = 0
+    for i in range(len(all_variants)):
+        all_votes += len(Vote.objects.filter(belongs_to=all_variants[i]))
 
     # Getting and reworking data
     lst = []
@@ -142,6 +164,7 @@ def view_poll(request, hash_id):
     context['poll_variants'] = lst
     context['poll'] = poll
     context['voted'] = voted
+    context['closed'] = not poll.open_for_vote
     return render(request, 'polls/poll.html', context)
 
 
@@ -160,6 +183,7 @@ def poll_create_page(request):
             p_name = form.cleaned_data['name']
             one_var = form.cleaned_data['one_variant']
             open_date = form.cleaned_data['date']
+            time = form.cleaned_data['time']
 
             # Poll object
             pollobj = Poll(
@@ -167,7 +191,8 @@ def poll_create_page(request):
                 date=context['current_date'],
                 name=p_name,
                 author=request.user,
-                open_date=open_date
+                open_date=open_date,
+                time=time,
             )
             pollobj.save()
             id_str = str(pollobj.id)
@@ -184,7 +209,8 @@ def poll_create_page(request):
                 else:
                     Poll_variant(
                         variant_name=cur_name,
-                        belongs_to=pollobj).save()
+                        belongs_to=pollobj
+                    ).save()
             context['form']=form
             messages.add_message(
                 request,

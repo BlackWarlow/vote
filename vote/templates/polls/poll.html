@@ -51,7 +51,7 @@
 				<ul>
 					{% for poll_variant in poll_variants %}
 					<li>
-						{% if not voted %}
+						{% if not voted and not closed %}
 							<input type="checkbox" name="variant_{{ poll_variant.2 }}"> {{ poll_variant.0.variant_name }}<br>
 						{% else %}
 							<span>{{ poll_variant.0.variant_name }}</span>
@@ -64,8 +64,12 @@
 				</ul>
 			{% endif %}
 			
-			{% if not voted %}
+			{% if not voted and not closed %}
 				<input class="button" type="submit" value="Пролосовать" style="margin-top: 5px;">
+			{% endif %}
+			
+			{% if closed %}
+				<i style="color: grey; margin-top: 5px;">Опрос закрыт</i>
 			{% endif %}
 			<a class="button warn report" href="http://localhost:8000/polls/add_report/{{ poll_hash }}/">Пожаловаться на опрос</a>
 		</form>

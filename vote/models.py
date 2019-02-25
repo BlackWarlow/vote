@@ -11,6 +11,7 @@ class Poll(models.Model):
     name = models.CharField(max_length=100)
     one_answer = models.BooleanField(default=True)
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    open_for_vote = models.BooleanField(default=True)
 
     def __str__(self):
         return 'poll <' + str(self.name) + '>'

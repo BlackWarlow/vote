@@ -10,11 +10,12 @@ class PollVariantsInline(admin.TabularInline):
 
 @admin.register(Poll)
 class PollAdmin(admin.ModelAdmin):
-    list_display = ('id', 'hash_id', 'date', 'time',
-                    'name', 'one_answer', 'author')
-    list_filter = ('id', 'hash_id', 'date', 'time',
-                   'name', 'one_answer', 'author')
-    fields = [('name', 'date', 'time'), ('hash_id', 'one_answer'), 'author']
+    list_display = ('id', 'hash_id', 'date', 'open_date', 'time',
+                    'name', 'one_answer', 'author', 'open_for_vote')
+    list_filter = ('id', 'hash_id', 'date', 'open_date', 'time',
+                   'name', 'one_answer', 'author', 'open_for_vote')
+    fields = [('name', 'date', 'open_date', 'time'),
+               ('hash_id', 'one_answer'), 'author', 'open_for_vote']
     inlines = [PollVariantsInline]
 
 @admin.register(Blog_Model)
