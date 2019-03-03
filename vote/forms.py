@@ -48,17 +48,18 @@ class User_Auth(forms.Form):
 class Report_Form(forms.Form):
     poll_hash_id = forms.CharField(
         required=True,
-        label='ID опроса',
+        label='ID опроса:',
         min_length=10,
     )
     theme = forms.CharField(
         required=True,
-        label='Тема жалобы',
+        label='Тема:',
         max_length=200,
     )
     text = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': '5', 'cols': 40}),
         required=True,
-        label='Жалоба',
+        label='Пожалуйста, опишите проблему:',
         max_length=5000,
     )
 

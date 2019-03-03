@@ -14,20 +14,21 @@
 					<li><a href="{{ menu.2.link }}"><i class="fas fa-sticky-note"></i> {{ menu.2.text }}</a></li>
 				</ul>
 			</li>
+			{% if user.is_staff %}
+				<li><a href="{{ menu.11.link }}"><i class="fas fa-edit"></i> {{menu.11.text}}</a></li>
+			{% endif %}
 			{% if user.is_authenticated %}
 				<li><a href="#">Аккаунт <i class="fas fa-caret-down "></i></a>
 					<ul class="submenu">
 						<li><a href="{{ menu.3.link }}"><i class="fas fa-user-circle"></i> {{ menu.3.text }}</a></li>
 						<li><a href="{{ menu.4.link }}"><i class="fas fa-poll"></i> {{ menu.4.text }}</a></li>
+						<li><a href="{{ menu.12.link }}"><i class="fas fa-comment-alt"></i> {{ menu.12.text }}</a></li>
 						<li><a class="menu_warn" href="{{ menu.5.link }}"><i class="fas fa-sign-out-alt"></i> {{ menu.5.text }}</a></li>
 					</ul>
 				</li>
             {% else %}
                 <li><a href="{{ menu.6.link }}">{{ menu.6.text }}</a></li>
             {% endif %}
-			{% if user.is_staff %}
-				<li><a href="{{ menu.11.link }}"><i class="fas fa-edit"></i> {{menu.11.text}} </a></li>
-			{% endif %}
 		</ul>
 	</nav>
 </div>

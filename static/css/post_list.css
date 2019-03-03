@@ -1,0 +1,25 @@
+#wrapper {
+	background-color: #577798;
+	border-radius: 10px;
+}
+.post {
+	border-bottom: 1px solid #1b2036;
+}
+.post a h4 {
+	text-transform: uppercase;
+}
+.post a span {
+	text-transform: none;
+}
+.post:last-child {
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	border-bottom: none;
+}
+.post:first-child {
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+}
+.post:hover {
+	background-color: #34689e;
+}

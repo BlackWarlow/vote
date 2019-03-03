@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/post_list.css' %}">
+<style>
+	table {
+		border-collapse: collapse;
+	}
+	th {
+		min-width: 20%;
+		font-size: 18px;
+		height: 3em;
+		vertical-align: middle;
+	}
+	td {
+		text-align: center;
+	}
+	th {
+		background-color: #3d6084;
+	}
+	th:first-child {
+		border-top-left-radius: 10px;
+	}
+	th:last-child {
+		border-top-right-radius: 10px;
+	}
+	
+	.status_approved {
+		background-color: #0f03;
+		height: 100%;
+		border-radius: 10px;
+	}
+	.status_processing {
+		background-color: #f003;
+		height: 100%;
+	}
+	td {
+		padding: 3px;
+		width: 25%;
+		border-bottom: 1px solid #3d6084;
+		border-right: 1px solid #3d6084;
+	}
+	tr:last-child td {
+		border-bottom: none;
+		border-bottom-right-radius: 10px;
+	}
+	td:last-child {
+		border-right: none;
+	}
+</style>
+<body>
+	<h1>{{main_header}}</h1>
+	<hr>
+	{% if reports %}
+		<table id="wrapper">
+			<tr>
+				<th>Тема жалобы</th>
+				<th>Текст жалобы</th>
+				<th>Название опроса</th>
+				<th>Статус</th>
+			</tr>
+			{% for report in reports %}
+			<tr>
+				<td style="word-break: break-all;">
+					<h4>{{ report.theme }}</h4>
+				</td>
+				<td style="word-break: break-all;">
+					{{ report.text|truncatechars:190 }}
+				</td>
+				<td style="word-break: break-all;">
+					<a href="/poll/{{ report.poll.hash_id }}/">
+						"<span style="color: #abb8fe;">{{ report.poll.name }}</span>"
+					</a>
+				</td>
+				{% if report.checked %}
+				<td class="status_wrapper status_approved">
+					<span>Проверено</span>
+				</td>
+				{% else %}
+				<td class="status_wrapper status_processing">
+					<span>Проверяется</span>
+				</td>
+				{% endif %}
+			</tr>
+			{% endfor %}
+		</table>
+	{% else %}
+		<p style="color:gray;"><i>Пока что у вас не было жалоб... :) </i>Если вы заметили что-то нарушающее правила сайта, вы всегда можете пожаловаться или связаться с нами в разделе "Контакты".</p>
+	{% endif %}
+</body>
+{% endblock %}

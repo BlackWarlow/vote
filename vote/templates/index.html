@@ -6,7 +6,7 @@
 
 <h1>Главная / Новости сайта</h1>
 <hr>
-
+{% if blogs %}
 {% for blog in blogs %}
 	<div class="post cl_container">
 		<h2 class="post_title">"{{ blog.theme|capfirst }}"</h2>
@@ -14,5 +14,8 @@
 		{{ blog.content|safe }}
 	</div>
 {% endfor %}
+{% else %}
+<p style="color:gray;"><i>Упс... </i>Кажется у нас проблемы с сайтом или совсем нету новостей. :(</p>
+{% endif %}
 
 {% endblock %}

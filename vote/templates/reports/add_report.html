@@ -1,21 +1,51 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-<div class="cl_container">
-	<form action="" method="post">
-		{% csrf_token %}
-		<div class="input_wrapper inline">
-			<div class="user_input">
-				{{ form.poll_hash_id.label }}: {{ form.poll_hash_id }}
+<link rel="stylesheet" href="{% static 'css/form.css' %}">
+<style>
+	textarea {
+		border-radius: 3px;
+	}
+	.submit_controls {
+		margin-top: 10px;
+	}
+	.inline i {
+		color: #abb8fe;
+	}
+</style>
+<body>
+	<h1>{{ main_header }}</h1>
+	<hr>
+	<div class="cl_container">
+		<form action="" method="post">
+			{% csrf_token %}
+			<div class="main_wrapper">
+				<div class="user_input inline">
+					{{ form.poll_hash_id.label }}<br>
+					{{ form.poll_hash_id }}
+				</div>
+				
+				{% if poll_name %}
+					<div class="inline">
+						Название опроса:<br>
+						"<i>{{ poll_name }}</i>"
+					</div>
+				{% endif %}
+				
+				<div class="user_input">
+					{{ form.theme.label }}<br>
+					{{ form.theme }}
+				</div>
 			</div>
-			<div class="user_input">
-				{{ form.theme.label }}: {{ form.theme }}
+			<div class="main_text">
+				{{ form.text.label }}<br>
+				{{ form.text }}
 			</div>
-		</div>
-		<div class="main_text inline">
-			{{ form.text.label }}: {{ form.text }}
-		</div>
-		<input type="submit" class="button" value="Отправить" style="color: white;">
-	</form>
-</div>
+			<div class="submit_controls">
+				<input type="submit" class="button" value="Отправить" style="color: white;">
+			</div>
+		</form>
+	</div>
+</body>
 {% endblock %}

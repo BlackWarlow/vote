@@ -1,0 +1,18 @@
+.method_img {
+	width: 50px;
+	height: 50px;
+}
+.method_img_alt {
+	width: 55px;
+	height: 50px;
+}
+.method_address {opacity: 0;}
+.col_space {padding-top: 40px;}
+.col_space a {transition: all 0.5s ease-in-out;}
+.col_space a span {transition: all ease-in-out 0.5s;}
+.method {
+	text-align: center;
+	width: 31%;
+}
+div.method:hover .col_space a {transform: translateY(-20px);}
+div.method:hover .col_space a span {opacity: 1;}

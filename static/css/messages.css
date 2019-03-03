@@ -3,7 +3,7 @@
 }
 #msg {
 	position: absolute;
-	top: 45px;
+	top: 50px;
 	left: 45px;
 	border: 2px solid #2bb79e;
 	background-color: #2c7466;
@@ -14,4 +14,8 @@
 }
 #close_btn {
 	cursor: pointer;
+}
+.error {
+	border: 2px solid #b72b2b !important;
+	background-color: #742c2c !important;
 }

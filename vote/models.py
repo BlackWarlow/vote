@@ -27,9 +27,13 @@ class Vote(models.Model):
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
 
 class Author(models.Model):
-    name = models.CharField(max_length=100)
-    social = models.CharField(max_length=100)
-    role = models.CharField(max_length=20, default='developer')
+    photopath = models.CharField(max_length=30)
+    nickname = models.CharField(max_length=20)
+    role = models.CharField(max_length=40, default='developer')
+    social1 = models.CharField(max_length=100)
+    social2 = models.CharField(max_length=100)
+    social3 = models.CharField(max_length=100)
+    info = models.CharField(max_length=100)
 
 class Report_Model(models.Model):
     poll = models.ForeignKey(

@@ -8,51 +8,36 @@
 	<hr>
 	
 	<div class="about-us">
-		<h2>Лезвие знаний</h2>
-		<p>"Работали все"
-			<span>но реально тащили 5 человек... а точнее даже 1</span></p>
+		<center>
+			<h1>"Лезвие знаний", МШП 301-08</h2>
+			<p>"Работали все"<br><span>но реально тащил за всю команду один :(</span></p>
+		</center>
 	</div>
 	
-	<div class="about-grids">
-	
-		<div class="about-grid">
-			<img src="{% static '121.jpg' %}"/>
-			<div class="about-grid-john">
-				<div class="john">
-                    <h4><font color="white" >Name</font></h4>
-                    <p><font color="#ecebed" >Position</font></p>
-				</div>
-				<div class="social-icons">
-					<ul>
-						<li><a href class="facebook"> </a></li>
-						<li><a href class="twitter"> </a></li>
-						<li><a href class="vk"> </a></li>
-					</ul>
-				</div>
-				<div class="clearfix"> </div>
-                <p class="para"><font color="#ecebed" >Description</font></p>
-			</div>
-		</div>
+	<div class="about-grid">
+		<center>
 		
-		<div class="about-grid about-mid">
-			<img src="{% static '121.jpg' %}"/>
-			<div class="about-grid-john">
-				<div class="john">
-                    <h4><font color="white" >Name</font></h4>
-                    <p><font color="#ecebed" >Position</font></p>
+		{% for author in authors %}
+			<div class="about-creator inline cl_container">
+				<img src="/static/images/{{ author.photopath }}"><br>
+				<b>{{ author.nickname }}</b>
+				({{ author.role|safe }})
+				<div class="creator-info">
+					"{{ author.info|safe }}"
 				</div>
-				<div class="social-icons">
-					<ul>
-						<li><a href class="facebook"> </a></li>
-						<li><a href class="twitter"> </a></li>
-						<li><a href class="vk"> </a></li>
-					</ul>
+				<div class="creator-socials">
+					{{ author.social1|safe }}
+					{% if author.social2 %}
+						<br>{{ author.social2|safe }}
+					{% endif %}
+					{% if author.social3 %}
+						<br>{{ author.social3|safe }}
+					{% endif %}
 				</div>
-				<div class="clearfix"> </div>
-                <p class="para"><font color="#ecebed" >Description</font></p>
 			</div>
-		</div>
+		{% endfor %}
 		
+		</center>
 	</div>
 </body>
 {% endblock %}

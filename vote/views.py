@@ -32,6 +32,7 @@ def get_base_context(request):
             {'link': '/contacts/', 'text': 'Контакты'},
             {'link': '/donate/', 'text': 'Помощь'},
             {'link': '/admin/', 'text': 'Модерация'},
+            {'link': '/polls/my_reports', 'text': 'Мои жалобы'}
         ],
         'user': request.user,
         'current_date': datetime.datetime.now().date().__str__(),
@@ -50,7 +51,7 @@ def creators_page(request):
     context = get_base_context(request)
     context['title'] = 'Создатели - SV'
     context['main_header'] = 'Simple votings - Django Python проект группы "Лезвие знаний"'
-    context['authors'] = Author.objects.all()
+    context['authors'] = list(reversed(Author.objects.all()))
     return render(request, 'creators.html', context)
 
 def contacts_page(request):
@@ -113,12 +114,10 @@ def view_poll(request, hash_id):
     context['poll_hash'] = hash_id
 
     all_variants = Poll_variant.objects.filter(belongs_to=poll)
-    all_votes = 0
     voted = False
 
     # Checking if already voted and getting all votes
     for i in range(len(all_variants)):
-        all_votes += len(Vote.objects.filter(belongs_to=all_variants[i]))
         if len(Vote.objects.filter(author=request.user, belongs_to=all_variants[i])):
             voted = True
 
@@ -262,7 +261,7 @@ def login_page(request):
 @login_required(login_url='/accounts/login/')
 def user(request, user_id=None):
     context = get_base_context(request)
-    context['title'] = 'Аккуант - SV'
+    context['title'] = 'Аккаунт - SV'
     context['main_header'] = 'Информация об аккаунте:'
     context['guest'] = False
     if user_id is not None:
@@ -364,30 +363,54 @@ def logout_page(request):
 def add_report(request, hash_id):
     context = get_base_context(request)
     context['title'] = 'Оставить жалобу - SV'
+    context['main_header'] = 'Создание жалобы'
 
     if request.method == 'POST':
         form = Report_Form(request.POST)
         if form.is_valid():
-            poll = Poll.objects.filter(
-                hash_id=form.cleaned_data['poll_hash_id'])[0]
-            record = Report_Model(
-                theme=form.cleaned_data['theme'],
-                text=form.cleaned_data['text'],
-                user=request.user,
-                poll=poll,
-            )
-            record.save()
-            messages.add_message(
-                request, messages.INFO, 'Ваша жалоба отправлена администраторам')
-            return redirect('/poll/' + hash_id + '/')
+            try:
+                poll = Poll.objects.filter(
+                    hash_id=form.cleaned_data['poll_hash_id'])[0]
+            except IndexError:
+                messages.add_message(
+                    request,
+                    messages.ERROR,
+                    'Извините, такого опроса не существует.'
+                )
+                context['form'] = Report_Form()
+                render(request, 'reports/add_report.html', context)
+            else:
+                record = Report_Model(
+                    theme=form.cleaned_data['theme'],
+                    text=form.cleaned_data['text'],
+                    user=request.user,
+                    poll=poll,
+                )
+                record.save()
+                messages.add_message(
+                    request, messages.INFO, 'Ваша жалоба отправлена администраторам')
+                return redirect('/poll/' + hash_id + '/')
     else:
         context['form'] = Report_Form(initial={'poll_hash_id': hash_id})
+        try:
+            poll = Poll.objects.filter(
+                hash_id=hash_id)[0]
+            context['poll_name'] = poll.name
+        except IndexError:
+            pass
     return render(request, 'reports/add_report.html', context)
 
 @login_required(login_url='/accounts/login/')
 def my_reports(request):
     context = get_base_context(request)
     context['title'] = 'Мои жалобы - SV'
+    context['main_header'] = 'Список моих жалоб'
     context['reports'] = list(
-        reversed(Report_Model.objects.filter(author=request.user)))
+        reversed(Report_Model.objects.filter(user=request.user)))
     return render(request, 'reports/my_reports.html', context)
+
+def donate_page(request):
+    context = get_base_context(request)
+    context['title'] = 'Поддержать - SV'
+    context['main_header'] = 'Пожертвовать на благо проекта'
+    return render(request, 'donate.html', context)

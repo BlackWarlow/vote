@@ -8,13 +8,13 @@
 	<h1>{{ main_header }}</h1> 
 	<div class="info_wrapper">
 		{% if user.is_superuser %}
-			<center><div><img title="ЫЫЫЫЫ" height="100" width="100" src="{% static 'admin_user.png' %}"></div></center>
+			<center><div><img title="ЫЫЫЫЫ" height="100" width="100" src="{% static 'images/admin_user.png' %}"></div></center>
 			<div><h3><i class="fa fa-circle fa-xs"></i> Ник на сайте: <span style="color:#db2d2d" title="Роль: Админ">@{{ user.username }}</span></h3></div>
 		{% elif user.is_staff %}
-			<center><div><img title="ыыыыы" height="100" width="100" src="{% static 'mod_user.png' %}"></div></center>
+			<center><div><img title="ыыыыы" height="100" width="100" src="{% static 'images/mod_user.png' %}"></div></center>
 			<div><h3><i class="fa fa-circle fa-xs"></i> Ник на сайте: <span style="color:#eac526" title="Роль: Модератор">@{{ user.username }}</span></h3></div>
 		{% else %}
-			<center><div><img title="ъъъъъ" height="100" width="100" src="{% static 'def_user.png' %}"></div></center>
+			<center><div><img title="ъъъъъ" height="100" width="100" src="{% static 'images/def_user.png' %}"></div></center>
 			<div><h3><i class="fa fa-circle fa-xs"></i> Ник на сайте: <span style="color:#5029ed" title="Роль: Пользователь">@{{ user.username }}</span></h3></div>
 		{% endif %}
 		{% if not guest %}
