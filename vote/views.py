@@ -414,3 +414,9 @@ def donate_page(request):
     context['title'] = 'Поддержать - SV'
     context['main_header'] = 'Пожертвовать на благо проекта'
     return render(request, 'donate.html', context)
+
+def page404(request):
+    return render(request, '404.html', status=404)
+
+def page500(request):
+    return render(request, '500.html', status=500)
