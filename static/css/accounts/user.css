@@ -15,6 +15,7 @@ img {
 }
 .alter_link {
 	min-width: 120px;
+	margin: 10px;
 }
 .menu_wrapper a {
 	padding: 0px;

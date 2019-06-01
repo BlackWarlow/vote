@@ -30,9 +30,9 @@ class Author(models.Model):
     photopath = models.CharField(max_length=30)
     nickname = models.CharField(max_length=20)
     role = models.CharField(max_length=40, default='developer')
-    social1 = models.CharField(max_length=100)
-    social2 = models.CharField(max_length=100)
-    social3 = models.CharField(max_length=100)
+    social1 = models.CharField(max_length=100, blank=True)
+    social2 = models.CharField(max_length=100, blank=True)
+    social3 = models.CharField(max_length=100, blank=True)
     info = models.CharField(max_length=100)
 
 class Report_Model(models.Model):

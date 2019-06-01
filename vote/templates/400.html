@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+<body>
+	<h1>{{ main_header }}</h1>
+	<p>С запросом к сайту что-то случилось, проверьте ссылку и попробуйте снова.</p>
+	<p>Вы можете связаться с нами <b><a href="/contacts/" style="display: contents; padding: 0px;">тут.</a></b></p>
+
+	<a class="button" href="/">Верните меня на главную!</a>
+</body>
+{% endblock %}

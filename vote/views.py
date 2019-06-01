@@ -44,7 +44,13 @@ def index_page(request):
     context = get_base_context(request)
     context['title'] = 'Главная страница - SV'
     context['main_header'] = 'Simple votings'
-    context['blogs'] = list(reversed(Blog_Model.objects.all()))
+    if request.GET.get('reversed', 0):
+        context['blogs'] = Blog_Model.objects.all()
+        context['reversed'] = True
+    else:
+        context['blogs'] = list(reversed(Blog_Model.objects.all()))
+        context['reversed'] = False
+
     return render(request, 'index.html', context)
 
 def creators_page(request):
@@ -61,22 +67,76 @@ def contacts_page(request):
     return render(request, 'contacts.html',context)
 
 
+def search_users(username):
+    lst = []
+    for user in User.objects.all():
+        if user.username.lower().find(username.lower()) != -1:
+            lst.append(user)
+    return lst
+
+
+def poll_search(request, has_user=False):
+    if has_user:
+        author_name = request.user.username
+    else:
+        author_name = request.GET.get('author', None)
+    poll_name = request.GET.get('poll', None)
+
+    if author_name == None and poll_name == None:
+        # User didn't search
+        all_polls = Poll.objects.all()
+        max_polls = min(30, len(all_polls))
+        lst = []
+        for i in range(max_polls):
+            lst.append(
+                [
+                    Poll_variant.objects.filter(belongs_to=all_polls[i]),
+                    all_polls[i]
+                ]
+            )
+    else:
+        # User searched something
+        if author_name != None:
+            authors = search_users(author_name)
+        else:
+            authors = []
+        all_polls = Poll.objects.all()
+        lst = []
+
+        if authors != []:
+            for poll in all_polls:
+                for author in authors:
+                    if poll.author == author:
+                        lst.append(poll)
+            all_polls = lst
+            lst = []
+
+        if poll_name != None:
+            for poll in all_polls:
+                if poll.name.find(poll_name) != -1:
+                    lst.append(poll)
+
+            all_polls = lst
+            lst = []
+
+        for poll in all_polls:
+            lst.append(
+                [
+                    Poll_variant.objects.filter(belongs_to=poll),
+                    poll
+                ]
+            )
+
+    return list(reversed(lst))
+
+
 def polls_page(request):
     context = get_base_context(request)
     context['title'] = 'Список опросов - SV'
     context['main_header'] = 'Список опросов на сайте'
-    all_polls = Poll.objects.all()
-    max_polls = min(20, len(all_polls))
-
-    lst = []
-    for i in range(0, max_polls):
-        lst.append(
-            [
-                Poll_variant.objects.filter(belongs_to=all_polls[i]),
-                all_polls[i]
-            ]
-        )
-    context['polls'] = list(reversed(lst))
+    polls = poll_search(request)
+    context['polls'] = polls
+    context['has_user'] = False
     return render(request, 'polls/polls.html', context)
 
 
@@ -85,17 +145,9 @@ def my_polls(request):
     context = get_base_context(request)
     context['title'] = 'Мои опросы - SV'
     context['main_header'] = 'Список моих опросов'
-    all_polls = Poll.objects.filter(author=request.user)
-
-    lst = []
-    for i in range(0, len(all_polls)):
-        lst.append(
-            [
-                Poll_variant.objects.filter(belongs_to=all_polls[i]),
-                all_polls[i]
-            ]
-        )
-    context['polls'] = list(reversed(lst))
+    polls = poll_search(request, True)
+    context['polls'] = polls
+    context['has_user'] = True
     return render(request, 'polls/polls.html', context)
 
 
@@ -118,29 +170,33 @@ def view_poll(request, hash_id):
 
     # Checking if already voted and getting all votes
     for i in range(len(all_variants)):
-        if len(Vote.objects.filter(author=request.user, belongs_to=all_variants[i])):
-            voted = True
+        if request.user.is_authenticated:
+            if len(Vote.objects.filter(author=request.user, belongs_to=all_variants[i])):
+                voted = True
+        else:
+            voted = False
 
     # Voting for variants
-    if request.method == 'POST' and not voted and poll.open_for_vote:
-        if poll.one_answer:
-            variant = request.POST.get('poll')[-1:]
-            vote = Vote(
-                belongs_to=all_variants[int(variant)],
-                author=request.user
-            )
-            vote.save()
-        else:
-            lst = []
-            for i in range(0, 10):
-                variant = request.POST.get('variant_' + str(i))
-                if variant == 'on':
-                    vote = Vote(
-                        belongs_to=all_variants[i],
-                        author=request.user
-                    )
-                    vote.save()
-        voted = True
+    if request.method == 'POST' and not voted and poll.open_for_vote and request.user.is_authenticated:
+        if request.user.is_authenticated:
+            if poll.one_answer:
+                variant = request.POST.get('poll')[-1:]
+                vote = Vote(
+                    belongs_to=all_variants[int(variant)],
+                    author=request.user
+                )
+                vote.save()
+            else:
+                lst = []
+                for i in range(0, 10):
+                    variant = request.POST.get('variant_' + str(i))
+                    if variant == 'on':
+                        vote = Vote(
+                            belongs_to=all_variants[i],
+                            author=request.user
+                        )
+                        vote.save()
+            voted = True
 
     # Renewing votes
     all_votes = 0
@@ -162,6 +218,7 @@ def view_poll(request, hash_id):
 
     context['poll_variants'] = lst
     context['poll'] = poll
+    context['votes'] = all_votes
     context['voted'] = voted
     context['closed'] = not poll.open_for_vote
     return render(request, 'polls/poll.html', context)
@@ -410,13 +467,50 @@ def my_reports(request):
     return render(request, 'reports/my_reports.html', context)
 
 def donate_page(request):
+
     context = get_base_context(request)
     context['title'] = 'Поддержать - SV'
     context['main_header'] = 'Пожертвовать на благо проекта'
+
     return render(request, 'donate.html', context)
 
-def page404(request):
-    return render(request, '404.html', status=404)
+def donate_thanks(request):
 
-def page500(request):
-    return render(request, '500.html', status=500)
+    context = get_base_context(request)
+    context['title'] = "Спасибо - SV"
+    context['main_header'] = 'Благодарим за поддержку проекта!'
+
+    return render(request, 'donate_thanks.html', context)
+
+
+
+def handler404(request, exception=''):
+
+    context = get_base_context(request)
+    context['title'] = "Ошибка - SV"
+    context['main_header'] = '404, Не найдено!'
+
+    return render(request, '404.html', context,  status=404)
+
+def handler500(request, exception=''):
+
+    context = get_base_context(request)
+    context['title'] = "Ошибка - SV"
+    context['main_header'] = '500, На сервере что-то пошло не так!'
+
+    return render(request, '500.html', context, status=500)
+
+def handler400(request, exception=''):
+
+    context = get_base_context(request)
+    context['title'] = "Ошибка - SV"
+    context['main_header'] = '400, Что-то не так с запросом!'
+    return render(request, '400.html', context, status=400)
+
+def handler403(request, exception=''):
+
+    context = get_base_context(request)
+    context['title'] = "Ошибка - SV"
+    context['main_header'] = '403, Кажется у вас нет прав на просмотр!'
+
+    return render(request, '403.html', context, status=403)

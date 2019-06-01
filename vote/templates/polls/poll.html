@@ -20,7 +20,11 @@
 		margin-right: 5px;
 		margin-left: auto;
 		font-size: 12px;
-		padding: 4px;	
+		padding: 4px;
+	}
+	.cl_container form p a{
+	    display: contents;
+	    padding: 0px;
 	}
 </style>
 
@@ -31,18 +35,20 @@
 		<form action="." method="POST">
 			{% csrf_token %}
 			<h2>{{ poll.name }}</h2>
-			
+			<p><b><a href="/accounts/user/{{ poll.author.id }}/">by @{{ poll.author }}</a></b></p>
+
 			{% if poll.one_answer %}
 				<ul>
 					{% for poll_variant in poll_variants %}
 					<li>
-						{% if not voted %}
+						{% if not voted and not closed and user.is_authenticated %}
 							<input type="radio" name="poll" value="variant_{{ poll_variant.2 }}"> {{ poll_variant.0.variant_name }}<br>
 						{% else %}
 							<span>{{ poll_variant.0.variant_name }}</span>
 						{% endif %}
+
 						<div class="pb_wrapper">
-							<div class="pb" style="width: {{ poll_variant.1 }};"><center><nobr>{{ poll_variant.1 }}</nobr></center></div>
+							<div class="pb" style="width: {{ poll_variant.1 }}; min-width: 50px;"><center><nobr>{{ poll_variant.1 }}</nobr></center></div>
 						</div>
 					</li>
 					{% endfor %}
@@ -51,27 +57,34 @@
 				<ul>
 					{% for poll_variant in poll_variants %}
 					<li>
-						{% if not voted and not closed %}
+						{% if not voted and not closed and user.is_authenticated %}
 							<input type="checkbox" name="variant_{{ poll_variant.2 }}"> {{ poll_variant.0.variant_name }}<br>
 						{% else %}
 							<span>{{ poll_variant.0.variant_name }}</span>
 						{% endif %}
+
 						<div class="pb_wrapper">
-							<div class="pb" style="width: {{ poll_variant.1 }};"><center><nobr>{{ poll_variant.1 }}</nobr></center></div>
+							<div class="pb" style="width: {{ poll_variant.1 }}; min-width: 50px;"><center><nobr>{{ poll_variant.1 }}</nobr></center></div>
 						</div>
 					</li>
 					{% endfor %}
 				</ul>
 			{% endif %}
-			
-			{% if not voted and not closed %}
-				<input class="button" type="submit" value="Пролосовать" style="margin-top: 5px;">
+
+            {% if user.is_authenticated %}
+                {% if voted %}
+                    <i style="color: grey; margin-top: 5px;">Вы уже проголосовали</i>
+			    {% elif closed %}
+				    <i style="color: grey; margin-top: 5px;">Опрос закрыт</i>
+			    {% else %}
+			        <input class="button" type="submit" value="Пролосовать" style="margin-top: 5px;">
+			    {% endif %}
+			{% else %}
+			    <i style="color: grey; margin-top: 5px;"><a href="/accounts/login/" style="display: contents;">Войдите,</a> чтобы проголосовать</i>
 			{% endif %}
-			
-			{% if closed %}
-				<i style="color: grey; margin-top: 5px;">Опрос закрыт</i>
-			{% endif %}
-			<a class="button warn report" href="http://localhost:8000/polls/add_report/{{ poll_hash }}/">Пожаловаться на опрос</a>
+
+
+			<a class="button warn report" href="/polls/add_report/{{ poll_hash }}/">Пожаловаться на опрос</a>
 		</form>
 		</div>
 </body>

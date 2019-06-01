@@ -35,7 +35,6 @@ a {
 	display: table;
 	vertical-align: middle;
 	text-align: center;
-	-webkit-appearance: button;
 	border: 1px solid #909090;
 }
 .button:hover {
@@ -65,14 +64,12 @@ a {
 	border-radius: 5px;
 	background-image: linear-gradient(to top, transparent, #577798);
 }
-
 main {
-	padding-top: 40px;
-	padding-bottom: 60px;
+    padding-top: 40px;
+    padding-bottom: 60px;
 	margin-left: 20%;
 	margin-right: 20%;
 }
-
 footer {
 	width: 100%;
 	background-color: inherit;
@@ -83,7 +80,7 @@ footer {
 footer a{
 	padding: 0px;
 	margin-top: 10px;
-	margin-left: 20px;	
+	margin-left: 25px;
 }
 
 footer .button {

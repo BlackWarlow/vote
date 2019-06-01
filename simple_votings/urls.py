@@ -31,7 +31,7 @@ urlpatterns = [
     path('polls/my_polls/', views.my_polls),
     path('polls/create/', views.poll_create_page),
     path('poll/<str:hash_id>/', views.view_poll),
-    # TODO path('poll/edit/<str:hash_id>/', views.edit_poll),
+    # TODO path('poll/<str:hash_id>/edit/', views.edit_poll),
 
     path('polls/add_report/', views.add_report),
     path('polls/add_report/<str:hash_id>/', views.add_report),
@@ -45,4 +45,10 @@ urlpatterns = [
     path('accounts/register/', views.user_register),
     path('contacts/', views.contacts_page),
     path('donate/', views.donate_page),
+    path('donate/thanks/', views.donate_thanks),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+handler404 = views.handler404
+handler500 = views.handler500
+handler403 = views.handler403
+handler400 = views.handler400

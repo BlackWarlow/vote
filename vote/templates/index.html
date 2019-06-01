@@ -6,6 +6,23 @@
 
 <h1>Главная / Новости сайта</h1>
 <hr>
+<div id='controls'>
+    {% if not reversed %}
+    <a href='/?reversed=1' class='button inline'>
+        ¿ииvɐdɯɔʚɐ εи ıqʚ
+    </a>
+    <div class='inline'>
+        Сортировано по новизне
+    </div>
+    {% else %}
+    <a href='/' class='button inline'>
+        Верните меня назад!
+    </a>
+    <div class ='inline'>
+        ииvɐdɯɔʚɐ ʁvɓ онɐʚоdиɯuɐɓɐ
+    </div>
+    {% endif %}
+</div>
 {% if blogs %}
 {% for blog in blogs %}
 	<div class="post cl_container">
@@ -15,7 +32,7 @@
 	</div>
 {% endfor %}
 {% else %}
-<p style="color:gray;"><i>Упс... </i>Кажется у нас проблемы с сайтом или совсем нету новостей. :(</p>
+<p style="color:gray;"><i>Упс... </i>Кажется, мы что-то натворили с сайтом и совсем нету новостей. :(</p>
 {% endif %}
 
 {% endblock %}

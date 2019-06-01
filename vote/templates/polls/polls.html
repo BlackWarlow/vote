@@ -3,29 +3,50 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/post_list.css' %}">
+<link rel="stylesheet" href="{% static 'css/form.css' %}">
 <style>
 	b {
 		color: white;
 	}
 	.poll_date{
 		float: right;
-		white-space: nowrap;
+		margin-right: 3px;
+	}
+	#search {
+	    margin-bottom: 5px;
 	}
 </style>
+
 <body>
 	<h1>{{main_header}}</h1>
 	<hr>
+
+	<div id="search">
+	    <div id="warn_msg" class="msg_warning" style="display: none;">Минимальное количество символов в запросе - 3, пожалуйста, проверьте правильность ввода данных.</div>
+	    <div class="inline">
+	        Название опроса:<br>
+	        <input type="text" id="poll_search">
+	    </div>
+	    {% if not has_user %}
+	    <div class="inline">
+	        Имя автора:<br>
+	        <input type="text" id="author_search">
+	    </div>
+	    {% endif %}
+	    <input class="button" type="button" value="Искать!" style="color: white;" onclick='search();'>
+	</div>
+
 	{% if polls %}
 		<div id="wrapper">
 			{% for poll in polls %}
 			<div class="post">
-				<a href="/poll/{{ poll.1.hash_id }}/">
+				<a class="menu_link" href="/poll/{{ poll.1.hash_id }}/">
 					{% if poll.1.open_for_vote %}
 						<h4>"{{ poll.1.name }}"</h4>
 					{% else %}
 						<h4 style="color: #f5b0b0 !important;" title="(Опрос закрыт)">"{{ poll.1.name }}"</h4>
 					{% endif %}
-						
+
 					<span>Автор: <b>@{{ poll.1.author }}</b></span>
 					<span class="poll_date"><i>{{ poll.1.date }}</i></span>
 				</a>
@@ -36,14 +57,33 @@
 		<p style="color:gray;"><i>Пока что тут пустовато... </i>Бегите быстрее создавать опросы, чтобы увидеть их тут.</p>
 	{% endif %}
 </body>
+
+<script>
+    function search(){
+        var poll = document.getElementById("poll_search").value.trim();
+        var author = document.getElementById("author_search").value.trim();
+        var search_string = window.location.href.split('?')[0];
+
+        var poll_data = false, author_data = false;
+        if(poll.length >= 3) poll_data = true;
+        if(author.length >= 3) author_data = true;
+
+        if(poll_data || author_data){
+            // Redirect user to search page
+            search_string += '?';
+            if(poll_data){
+                search_string += "poll=" + poll;
+            }
+            if(author_data){
+                if(poll) search_string += '&';
+                search_string += "author=" + author;
+
+            }
+            window.location.replace(search_string);
+        } else {
+            document.getElementById("warn_msg").style.display = 'block';
+        }
+    }
+</script>
+
 {% endblock %}
-
-
-
-
-
-
-
-
-
-

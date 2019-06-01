@@ -53,7 +53,7 @@ ul {
 	background-color: #303030;
 }
 
-a {
+.menu_link {
 	display: block;
 	padding: 10px 15px;
 	text-decoration: none;

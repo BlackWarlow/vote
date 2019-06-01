@@ -7,11 +7,11 @@
 <body>
 	<h1>{{ main_header }}</h1>
 	<hr>
-	
+
 	<div class="main_text">
 		{% if not user.is_authenticated %}
 			<form action="/accounts/login/" method="POST">
-				{% csrf_token%}
+				{% csrf_token %}
 				<div class="cl_container">
 					{% if form.errors or error %}
 						<div class="msg_warning">Ошибка входа, неверные имя пользователя или пароль!</div>
@@ -29,10 +29,12 @@
 					</div>
 					<input class="button" type="submit" value="Войти на сайт" style="color: white;">
 					</center>
-					Нет учётной записи?<a href="/accounts/register/" style="text-decoration: underline;">Зарегистрируйтесь!</a>
+					<div style="margin-top: 10px;">
+					    Нет учётной записи? <a href="/accounts/register/" style="text-decoration: underline;">Зарегистрируйтесь!</a>
+					</div>
 				</div>
 			</form>
-				
+
 		{% else %}
 			<div class="cl_container">
 				<center>
