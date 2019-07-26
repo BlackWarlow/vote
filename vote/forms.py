@@ -57,7 +57,13 @@ class Report_Form(forms.Form):
         max_length=200,
     )
     text = forms.CharField(
-        widget=forms.Textarea(attrs={'rows': '5', 'cols': 40}),
+        widget=forms.Textarea(
+            attrs={
+                'rows': 5, 'cols': 40,
+                'style':'resize:none; spellcheck:true;',
+                'oninput':'this.style.height = "";this.style.height = this.scrollHeight + "px"'
+            }
+        ),
         required=True,
         label='Пожалуйста, опишите проблему:',
         max_length=5000,

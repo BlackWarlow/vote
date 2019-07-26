@@ -14,9 +14,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
 import django.contrib.auth
 
 from vote import views
@@ -43,6 +44,7 @@ urlpatterns = [
     path('accounts/user/<int:user_id>/', views.user),
     path('accounts/edit/', views.user_edit),
     path('accounts/register/', views.user_register),
+
     path('contacts/', views.contacts_page),
     path('donate/', views.donate_page),
     path('donate/thanks/', views.donate_thanks),

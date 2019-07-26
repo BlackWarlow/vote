@@ -10,14 +10,14 @@
 	.submit_controls {
 		margin-top: 10px;
 	}
-	.inline i {
+	.main_wrapper i {
 		color: #abb8fe;
 	}
 </style>
 <body>
 	<h1>{{ main_header }}</h1>
 	<hr>
-	<div class="cl_container">
+	<div id='box_wrapper' class="cl_container">
 		<form action="" method="post">
 			{% csrf_token %}
 			<div class="main_wrapper">
@@ -25,14 +25,14 @@
 					{{ form.poll_hash_id.label }}<br>
 					{{ form.poll_hash_id }}
 				</div>
-				
+
 				{% if poll_name %}
 					<div class="inline">
 						Название опроса:<br>
 						"<i>{{ poll_name }}</i>"
 					</div>
 				{% endif %}
-				
+
 				<div class="user_input">
 					{{ form.theme.label }}<br>
 					{{ form.theme }}
@@ -48,4 +48,10 @@
 		</form>
 	</div>
 </body>
+
+<script>
+    max_width = document.getElementById('box_wrapper').offsetWidth;
+    console.log(max_width);
+    document.getElementById('id_text').style.width = 0.8 * max_width + 'px';
+</script>
 {% endblock %}

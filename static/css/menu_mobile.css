@@ -1,0 +1,86 @@
+.topmenu {
+    visibility: hidden;
+    border: 1px solid #3b5168;
+    position: fixed;
+    top: 50px;
+    right: 0px;
+    width: 80%;
+    height: 100%;
+    background: #577798;
+    z-index: 10;
+}
+
+.menu_button {
+    font-size: 3em;
+    text-align: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+    background: #577798;
+    position: fixed;
+    top: 0px;
+    right: 0px;
+}
+
+.menu ul {
+    border: 1px solid #3b5168;
+    border-radius: 5px;
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+.topmenu .submenu li {
+    background: #577798;
+    border-bottom: 1px solid #3b5168;
+}
+
+.topmenu .submenu li:hover {
+    background: #303030;
+}
+
+.topmenu ul li:last-child {
+    border-bottom: none;
+}
+
+.menu_warn {
+	color: #f99;
+}
+.menu_warn:hover {
+	background: #863838;
+}
+
+.menu_link {
+    display: block;
+	padding: 10px 15px;
+	text-decoration: none;
+	outline: none;
+	font-size: 1.1em;
+}
+
+.upper {
+    margin-left: 25px;
+    text-decoration: underline;
+}
+
+.logo_holder {
+    margin: 5px;
+}
+
+.logo_holder i, b {
+	color: #577798;
+}
+.logo_holder b {
+	font-size: 20px;
+}
+.logo_holder span {
+	font-size: 20px;
+	color: white !important;
+}
+.logo_holder a {
+	padding: 0px;
+}
+
+.topmenu > li:first-child {
+    display: none;
+}

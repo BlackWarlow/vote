@@ -2,21 +2,21 @@
 {% load static %}
 {% block content %}
 <link href="{% static 'css/pages/creators.css' %}" rel="stylesheet"/>
-	
+
 <body>
 	<h1>О нас</h1>
 	<hr>
-	
+
 	<div class="about-us">
 		<center>
-			<h1>"Лезвие знаний", МШП 301-08</h2>
+			<h1>"Лезвие Знаний", МШП 301-08</h2>
 			<p>"Работали все"<br><span>но реально тащил за всю команду один :(</span></p>
 		</center>
 	</div>
-	
+
 	<div class="about-grid">
 		<center>
-		
+
 		{% for author in authors %}
 			<div class="about-creator inline cl_container">
 				<img src="/static/images/{{ author.photopath }}"><br>
@@ -36,7 +36,7 @@
 				</div>
 			</div>
 		{% endfor %}
-		
+
 		</center>
 	</div>
 </body>

@@ -70,6 +70,16 @@ main {
 	margin-left: 20%;
 	margin-right: 20%;
 }
+
+
+@media screen and (max-device-width: 480px) {
+    /* Для мобильных */
+    main {
+        margin-left: 5%;
+	    margin-right: 5%;
+    }
+}
+
 footer {
 	width: 100%;
 	background-color: inherit;
@@ -77,14 +87,14 @@ footer {
 	bottom: 0;
 }
 
+footer .button {
+	min-width: 100px;
+}
+
 footer a{
 	padding: 0px;
 	margin-top: 10px;
 	margin-left: 25px;
-}
-
-footer .button {
-	min-width: 100px;
 }
 
 #copyright {
@@ -94,4 +104,11 @@ footer .button {
 	width: 170px;
 	height: 30px;
 	color: darkgrey;
+}
+
+@media screen and (max-device-width: 480px) {
+    /* Для мобильных */
+    footer {
+        position: relative;
+    }
 }

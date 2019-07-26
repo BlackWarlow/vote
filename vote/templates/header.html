@@ -6,16 +6,21 @@
 				<i class="fa fa-check-square fa-2x"></i> <b>Simple </b><span>Votings</span>
 			</a>
 		</div>
-		<ul class="topmenu no_select inline">
-			<li><a class="menu_link" href="{{ menu.0.link }}"><i class="fas fa-home"></i> {{ menu.0.text }}</a></li>
-			<li><a class="menu_link" href="#">Опросы <i class="fas fa-caret-down "></i></a>
+
+		<div class="menu_button inline" onclick="toggle_menu()">
+		    <i class="fas fa-bars"></i>
+		</div>
+
+		<ul id='topmenu' class="topmenu no_select inline">
+			<li><a class="menu_link upper" href="{{ menu.0.link }}"><i class="fas fa-home"></i> {{ menu.0.text }}</a></li>
+			<li><a class="menu_link upper" href="#">Опросы <i class="fas fa-caret-down "></i></a>
 				<ul class="submenu">
 					<li><a class="menu_link" href="{{ menu.1.link }}"><i class="fas fa-plus-square"></i> {{ menu.1.text }}</a></li>
 					<li><a class="menu_link" href="{{ menu.2.link }}"><i class="fas fa-sticky-note"></i> {{ menu.2.text }}</a></li>
 				</ul>
 			</li>
 			{% if user.is_staff %}
-				<li><a class="menu_link" href="#"><i class="fas fa-edit"></i> {{menu.11.text}} <i class="fas fa-caret-down "></i></a>
+				<li><a class="menu_link upper" href="#"><i class="fas fa-edit"></i> {{menu.11.text}} <i class="fas fa-caret-down "></i></a>
 				    <ul class="submenu">
 						<li><a class="menu_link" href="{{ menu.11.link }}"><i class="fas fa-toolbox"></i> Django Admin </a></li>
 						<li><a class="menu_link" href="https://www.pythonanywhere.com/user/bladeknow/"><i class="fab fa-python"></i> Хостинг </a></li>
@@ -24,7 +29,7 @@
 
 			{% endif %}
 			{% if user.is_authenticated %}
-				<li><a class="menu_link" href="#">Аккаунт <i class="fas fa-caret-down "></i></a>
+				<li><a class="menu_link upper" href="#">Аккаунт <i class="fas fa-caret-down "></i></a>
 					<ul class="submenu">
 						<li><a class="menu_link" href="{{ menu.3.link }}"><i class="fas fa-user-circle"></i> {{ menu.3.text }}</a></li>
 						<li><a class="menu_link" href="{{ menu.4.link }}"><i class="fas fa-poll"></i> {{ menu.4.text }}</a></li>
@@ -38,3 +43,20 @@
 		</ul>
 	</nav>
 </div>
+
+<script>
+    var hidden = true;
+    function toggle_menu(){
+        object = document.getElementById('topmenu');
+        if(hidden){
+            object.style.visibility = 'visible';
+            object.style.opacity = 1;
+            object.style.transition= '.2s ease-out';
+            hidden = false;
+        } else {
+            object.style.visibility= 'hidden';
+            object.style.opacity= 0;
+            hidden = true;
+        }
+    }
+</script>

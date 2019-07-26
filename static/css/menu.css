@@ -5,6 +5,10 @@
 	display: table;
 }
 
+.menu_button {
+    display: none;
+}
+
 ul {
 	list-style: none;
 	margin: 0;
@@ -71,9 +75,12 @@ ul {
 .menu_warn:hover {
 	background-image: linear-gradient(to top, #f99, transparent);
 }
+
+
 .logo_holder {
 	margin-right: 15px;
 }
+
 .logo_holder i, b {
 	color: #577798;
 }
@@ -86,4 +93,11 @@ ul {
 }
 .logo_holder a {
 	padding: 0px;
+}
+
+@media screen and (max-device-width: 950px) {
+    /* Для узких экранов */
+    .topmenu > li:first-child {
+	    display: none;
+    }
 }
